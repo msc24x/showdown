@@ -32,7 +32,3 @@ var RUNNER_PATHS = map[string]string{
 	PYTHON:     "python",
 	GOLANG:     "go",
 }
-
-func GetRunnerPath(lang *string) string {
-	return RUNNER_PATHS[*lang]
-}

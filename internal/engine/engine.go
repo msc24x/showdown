@@ -18,18 +18,9 @@ type ExecutionRequest struct {
 	Output   string `json:"output"`
 }
 
-func IsSupportedLanguage(lang string) bool {
-	for _, value := range config.SUPPORTED_LANGUAGES {
-		if value == lang {
-			return true
-		}
-	}
-	return false
-}
-
 func (exeReq *ExecutionRequest) Validate() error {
 
-	flag := IsSupportedLanguage(exeReq.Language)
+	flag, _ := IsSupportedLanguage(exeReq.Language)
 	if !flag {
 		return errors.New("language is not supported")
 	}
@@ -52,11 +43,12 @@ func (exeReq *ExecutionRequest) Validate() error {
 type BaseEngine struct {
 	Request *ExecutionRequest
 
-	runnerPath     string
+	commandPath    string
 	runnerCommands []string
-	runnerEnviron  []string
+	envs           []string
 
 	workDirectory  string
+	executablePath string
 	sourceFilePath string
 	inputFilePath  string
 }
@@ -95,11 +87,16 @@ func (engine *BaseEngine) prepareFiles() error {
 }
 
 func (engine *BaseEngine) prepareCommand() error {
-	engine.runnerPath = config.GetRunnerPath(&engine.Request.Language)
+	language_info := GetLanguageInfo(&engine.Request.Language)
+	if language_info.HasRunner {
+		engine.commandPath = language_info.RunnerPath
+	} else {
+		engine.commandPath = language_info.CompilerPath
+	}
 
 	switch engine.Request.Language {
 	case config.TYPESCRIPT:
-		engine.runnerEnviron = append(engine.runnerEnviron, "TS_NODE_FILES=true")
+		engine.envs = append(engine.envs, "TS_NODE_FILES=true")
 	case config.GOLANG:
 		engine.runnerCommands = append(engine.runnerCommands, "run")
 	}
@@ -127,10 +124,10 @@ func (engine *BaseEngine) Init(exe_req *ExecutionRequest) error {
 
 func (engine *BaseEngine) Execute() ([]byte, error) {
 
-	exe := exec.Command(engine.runnerPath, engine.runnerCommands...)
+	exe := exec.Command(engine.commandPath, engine.runnerCommands...)
 	timeout := false
 
-	exe.Env = append(os.Environ(), engine.runnerEnviron...)
+	exe.Env = append(os.Environ(), engine.envs...)
 
 	input_writer, _ := exe.StdinPipe()
 

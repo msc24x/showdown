@@ -1,7 +1,7 @@
 package api
 
 import (
-	"fmt"
+	"encoding/json"
 	"msc24x/showdown/internal/engine"
 	"msc24x/showdown/internal/judge"
 
@@ -36,8 +36,8 @@ func Judge(c *gin.Context) {
 func GetStats(c *gin.Context) {
 	stats := judge.GetState()
 
-	response := fmt.Sprintf("Active Processes: %d\nTotal Processed: %d", stats.ActiveProcesses, stats.TotalProcessed)
+	response, _ := json.Marshal(stats)
 
-	c.Writer.Write([]byte(response))
+	c.Writer.Write(response)
 
 }
