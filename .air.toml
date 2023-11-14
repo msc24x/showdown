@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "build\\showdown.exe"
+  bin = "build/showdown.exe"
   cmd = "go build -o ./build/showdown.exe ./cmd/showdown "
   delay = 500
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "files"]
@@ -18,8 +18,8 @@ tmp_dir = "tmp"
   include_file = []
   kill_delay = "10s"
   log = "build-errors.log"
-  poll = false
-  poll_interval = 0
+  poll = true
+  poll_interval = 1000
   rerun = false
   rerun_delay = 500
   send_interrupt = false

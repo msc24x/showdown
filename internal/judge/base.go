@@ -89,11 +89,11 @@ func JudgeLines(test [][]rune, truth [][]rune) bool {
 
 func JudgeExecutionRequest(exe_req *engine.ExecutionRequest) (*ExecutionResponse, error) {
 
-	err := OnboardProcess(exe_req.Token)
+	err := OnboardProcess(exe_req.PID, exe_req.UID)
 	if err != nil {
 		return nil, err
 	}
-	defer OffboardProcess(exe_req.Token)
+	defer OffboardProcess(exe_req.PID, exe_req.UID)
 
 	engine := engine.BaseEngine{}
 

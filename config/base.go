@@ -14,21 +14,3 @@ const (
 	PYTHON     = "py"
 	GOLANG     = "go"
 )
-
-var SUPPORTED_LANGUAGES = []string{
-	CPP,
-	C,
-	TYPESCRIPT,
-	JAVASCRIPT,
-	PYTHON,
-	GOLANG,
-}
-
-var RUNNER_PATHS = map[string]string{
-	CPP:        "g++",
-	C:          "gcc",
-	JAVASCRIPT: "node",
-	TYPESCRIPT: "ts-node",
-	PYTHON:     "python",
-	GOLANG:     "go",
-}

@@ -11,7 +11,8 @@ import (
 )
 
 type ExecutionRequest struct {
-	Token    string `json:"token"`
+	PID      string `json:"pid"`
+	UID      string `json:"uid"`
 	Code     string `json:"code"`
 	Language string `json:"language"`
 	Input    string `json:"input"`
@@ -67,9 +68,9 @@ type BaseEnginePI interface {
 func (engine *BaseEngine) prepareFiles() error {
 	engine.workDirectory = config.ENGINE_WORKDIR
 
-	file_name := fmt.Sprintf("%s.%s", engine.Request.Token, engine.Request.Language)
+	file_name := fmt.Sprintf("%s.%s", engine.Request.PID, engine.Request.Language)
 	engine.sourceFilePath = fmt.Sprintf("%s/%s", engine.workDirectory, file_name)
-	engine.inputFilePath = fmt.Sprintf("%s/%s.txt", engine.workDirectory, engine.Request.Token)
+	engine.inputFilePath = fmt.Sprintf("%s/%s.txt", engine.workDirectory, engine.Request.PID)
 
 	err := os.WriteFile(engine.sourceFilePath, []byte(engine.Request.Code), 0644)
 
