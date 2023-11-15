@@ -9,7 +9,6 @@ import (
 )
 
 func Judge(c *gin.Context) {
-
 	var exe_req engine.ExecutionRequest
 
 	if err := c.BindJSON((&exe_req)); err != nil {

@@ -4,9 +4,9 @@ type Language struct {
 	Supported bool
 	Format    string
 
-	HasRunner    bool
-	RunnerPath   string
-	CompilerPath string
+	BuildRequired bool
+	RunnerPath    string
+	CompilerPath  string
 
 	DefaultEnvs  []string
 	SubCommands  []string
@@ -15,48 +15,48 @@ type Language struct {
 
 var (
 	PYTHON = Language{
-		Format:       "py",
-		HasRunner:    false,
-		RunnerPath:   "python",
-		CompilerPath: "",
-		Supported:    true,
+		Format:        "py",
+		BuildRequired: false,
+		RunnerPath:    "/usr/bin/python3",
+		CompilerPath:  "",
+		Supported:     true,
 	}
 	CPP = Language{
-		Format:       "cpp",
-		HasRunner:    true,
-		RunnerPath:   "",
-		CompilerPath: "g++",
-		Supported:    true,
+		Format:        "cpp",
+		BuildRequired: false,
+		RunnerPath:    "",
+		CompilerPath:  "g++",
+		Supported:     false,
 	}
 	C = Language{
-		Format:       "c",
-		HasRunner:    true,
-		RunnerPath:   "",
-		CompilerPath: "gcc",
-		Supported:    true,
+		Format:        "c",
+		BuildRequired: true,
+		RunnerPath:    "",
+		CompilerPath:  "gcc",
+		Supported:     true,
 	}
 	JAVASCRIPT = Language{
-		Format:       "js",
-		HasRunner:    false,
-		RunnerPath:   "node",
-		CompilerPath: "",
-		Supported:    true,
+		Format:        "js",
+		BuildRequired: true,
+		RunnerPath:    "node",
+		CompilerPath:  "",
+		Supported:     true,
 	}
 	TYPESCRIPT = Language{
-		Format:       "ts",
-		HasRunner:    false,
-		RunnerPath:   "ts-node",
-		CompilerPath: "",
-		Supported:    true,
-		DefaultEnvs:  []string{"TS_NODE_FILES=true"},
+		Format:        "ts",
+		BuildRequired: true,
+		RunnerPath:    "ts-node",
+		CompilerPath:  "",
+		Supported:     true,
+		DefaultEnvs:   []string{"TS_NODE_FILES=true"},
 	}
 	GOLANG = Language{
-		Format:       "go",
-		HasRunner:    true,
-		RunnerPath:   "go",
-		CompilerPath: "",
-		Supported:    true,
-		SubCommands:  []string{"run"},
+		Format:        "go",
+		BuildRequired: false,
+		RunnerPath:    "/usr/local/go/bin/go",
+		CompilerPath:  "/usr/local/go/bin/go",
+		Supported:     true,
+		SubCommands:   []string{"run"},
 	}
 )
 
@@ -71,7 +71,7 @@ var SUPPORTED_LANGUAGES = []*Language{
 
 func IsSupportedLanguage(lang string) (bool, *Language) {
 	for _, value := range SUPPORTED_LANGUAGES {
-		if value.Format == lang {
+		if value.Format == lang && value.Supported {
 			return true, value
 		}
 	}

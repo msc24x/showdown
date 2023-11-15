@@ -8,6 +8,7 @@ type ExecutionResponse struct {
 	Success  bool   `json:"success"`
 	Error    string `json:"error"`
 	Output   string `json:"output"`
+	Meta     string `json:"meta"`
 	Expected string `json:"expected"`
 }
 
@@ -97,24 +98,27 @@ func JudgeExecutionRequest(exe_req *engine.ExecutionRequest) (*ExecutionResponse
 
 	engine := engine.BaseEngine{}
 
-	engine.Init(exe_req)
+	if err := engine.Init(exe_req); err != nil {
+		return nil, err
+	}
 	defer engine.Clean()
 
 	output, err := engine.Execute()
+	response := ExecutionResponse{}
+	response.Output = string(output)
+	meta_info, _ := engine.CollectMeta()
+	response.Meta = string(meta_info)
+
+	if err != nil {
+		response.Error = err.Error()
+		return &response, nil
+	}
 
 	test_output_lines := StringToLineBuffers(string(output))
 	truth_output_lines := StringToLineBuffers(exe_req.Output)
 
-	response := ExecutionResponse{}
-
 	response.Success = JudgeLines(test_output_lines, truth_output_lines)
-	response.Output = string(output)
 	response.Expected = string(exe_req.Output)
-
-	if err != nil {
-		response.Error = err.Error()
-
-	}
 
 	return &response, nil
 
