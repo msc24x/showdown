@@ -12,6 +12,7 @@ func WriteBadRequest(c *gin.Context, msg string) {
 	c.Writer.Write([]byte(msg))
 }
 
+// Initializes the API routes
 func Init(router *gin.Engine) {
 
 	router.POST("/judge", Judge)

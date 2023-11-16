@@ -1,10 +1,10 @@
 package engine
 
 type Language struct {
-	Supported bool
+	Supported bool // To temporarily disable a language's support
 	Format    string
 
-	BuildRequired bool
+	BuildRequired bool // Tells the BaseEngine whether to use RunnerPath or CompilerPath
 	RunnerPath    string
 	CompilerPath  string
 

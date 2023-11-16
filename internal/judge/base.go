@@ -1,3 +1,4 @@
+// Package judge utilizes the package engine and judges the execution output
 package judge
 
 import (
@@ -12,7 +13,10 @@ type ExecutionResponse struct {
 	Expected string `json:"expected"`
 }
 
-func StringToLineBuffers(data string) [][]rune {
+// Creates a matrix of runes having each line separated. While parsing '\r'
+// are ignored to support CRLF encoding and extra white spaces along with
+// blank lines are removed.
+func stringToLineBuffers(data string) [][]rune {
 	var (
 		output_lines [][]rune
 		line_buf     []rune
@@ -66,7 +70,9 @@ func StringToLineBuffers(data string) [][]rune {
 
 }
 
-func JudgeLines(test [][]rune, truth [][]rune) bool {
+// Core function to determine the correctness of the output with the expected
+// output.
+func judgeLines(test [][]rune, truth [][]rune) bool {
 	if len(test) != len(truth) {
 		return false
 	}
@@ -88,6 +94,7 @@ func JudgeLines(test [][]rune, truth [][]rune) bool {
 	return true
 }
 
+// Entrypoint for an HTTP execution request
 func JudgeExecutionRequest(exe_req *engine.ExecutionRequest) (*ExecutionResponse, error) {
 
 	err := OnboardProcess(exe_req.PID, exe_req.UID)
@@ -106,6 +113,7 @@ func JudgeExecutionRequest(exe_req *engine.ExecutionRequest) (*ExecutionResponse
 	output, err := engine.Execute()
 	response := ExecutionResponse{}
 	response.Output = string(output)
+	response.Expected = string(exe_req.Output)
 	meta_info, _ := engine.CollectMeta()
 	response.Meta = string(meta_info)
 
@@ -114,11 +122,10 @@ func JudgeExecutionRequest(exe_req *engine.ExecutionRequest) (*ExecutionResponse
 		return &response, nil
 	}
 
-	test_output_lines := StringToLineBuffers(string(output))
-	truth_output_lines := StringToLineBuffers(exe_req.Output)
+	test_output_lines := stringToLineBuffers(string(output))
+	truth_output_lines := stringToLineBuffers(exe_req.Output)
 
-	response.Success = JudgeLines(test_output_lines, truth_output_lines)
-	response.Expected = string(exe_req.Output)
+	response.Success = judgeLines(test_output_lines, truth_output_lines)
 
 	return &response, nil
 

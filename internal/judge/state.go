@@ -7,18 +7,19 @@ import (
 	"time"
 )
 
+// An in memory runtime information and statistics of the Showdown
 type JudgeState struct {
 	Started time.Time
 
-	TotalProcessed  int
-	ActiveProcesses int
-	DeniedProcesses int
+	TotalProcessed  int // Total number of requests processed since start
+	ActiveProcesses int // Number of active requests being processed
+	DeniedProcesses int // Number of denied requests to due limits or policies
 
 	MaxUsers    int
 	ActiveUsers int
 
-	processes map[string]bool
-	users     map[string]int
+	processes map[string]bool // Map of processes currently being processed
+	users     map[string]int  // Map of users having at least one request being processed by the application.
 }
 
 var (
@@ -39,6 +40,7 @@ func GetState() *JudgeState {
 	return &judge_state
 }
 
+// Record/verify an execution request
 func OnboardProcess(pid string, uid string) error {
 	judge_state_mutex.Lock()
 	defer judge_state_mutex.Unlock()
@@ -72,6 +74,7 @@ func OnboardProcess(pid string, uid string) error {
 	return nil
 }
 
+// Record the completion of an execution request
 func OffboardProcess(pid string, uid string) {
 	judge_state_mutex.Lock()
 	defer judge_state_mutex.Unlock()
