@@ -4,8 +4,8 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "build/showdown"
-  cmd = "/usr/local/go/bin/go build -buildvcs=false -o ./build/showdown ./cmd/showdown "
+  bin = "build/showdown -start -p 9090"
+  cmd = "/usr/local/go/bin/go build -buildvcs=false -o ./build/showdown ./cmd/showdown"
   delay = 500
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "files"]
   exclude_file = []

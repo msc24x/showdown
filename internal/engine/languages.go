@@ -17,7 +17,7 @@ var (
 	PYTHON = Language{
 		Format:        "py",
 		BuildRequired: false,
-		RunnerPath:    "/usr/bin/python3",
+		RunnerPath:    "python",
 		CompilerPath:  "",
 		Supported:     true,
 	}
@@ -53,8 +53,8 @@ var (
 	GOLANG = Language{
 		Format:        "go",
 		BuildRequired: false,
-		RunnerPath:    "/usr/local/go/bin/go",
-		CompilerPath:  "/usr/local/go/bin/go",
+		RunnerPath:    "go",
+		CompilerPath:  "go",
 		Supported:     true,
 		SubCommands:   []string{"run"},
 	}

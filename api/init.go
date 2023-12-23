@@ -1,6 +1,10 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	"log"
+
+	"github.com/gin-gonic/gin"
+)
 
 func WriteServerError(c *gin.Context, msg string) {
 	c.Writer.WriteHeader(500)
@@ -13,9 +17,8 @@ func WriteBadRequest(c *gin.Context, msg string) {
 }
 
 // Initializes the API routes
-func Init(router *gin.Engine) {
-
+func AttachHandlers(router *gin.Engine) {
+	log.Println("Attaching API handlers...")
 	router.POST("/judge", Judge)
 	router.GET("/stats", GetStats)
-
 }

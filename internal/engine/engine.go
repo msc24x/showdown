@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"msc24x/showdown/config"
+	"msc24x/showdown/internal/utils"
 	"os"
 	"os/exec"
 	"reflect"
@@ -88,12 +89,12 @@ func (engine *BaseEngine) prepareFiles() error {
 
 	absSourceFilePath := fmt.Sprintf("%s/%s", engine.workDirectory, engine.sourceFilePath)
 	if err := os.WriteFile(absSourceFilePath, []byte(engine.Request.Code), 0644); err != nil {
-		return err
+		return utils.NewError(err, "Writing code file")
 	}
 
 	absInputFilePath := fmt.Sprintf("%s/%s", engine.workDirectory, engine.inputFilePath)
 	if err := os.WriteFile(absInputFilePath, []byte(engine.Request.Input), 0644); err != nil {
-		return err
+		return utils.NewError(err, "Writing input file")
 	}
 
 	return nil
@@ -101,6 +102,11 @@ func (engine *BaseEngine) prepareFiles() error {
 
 func (engine *BaseEngine) prepareCommand() error {
 	engine.languageInfo = GetLanguageInfo(&engine.Request.Language)
+
+	if engine.languageInfo == nil {
+		return errors.New("cannot process given language")
+	}
+
 	if engine.languageInfo.BuildRequired {
 		engine.command = engine.languageInfo.CompilerPath
 	} else {
@@ -121,7 +127,8 @@ func (engine *BaseEngine) cleanIsolatedBox() error {
 		"--cleanup",
 	)
 	_, err := boxCleanupCmd.CombinedOutput()
-	return err
+
+	return utils.NewError(err, "Cleaning isolate box")
 }
 
 func (engine *BaseEngine) prepareIsolatedBox(retry bool) error {
@@ -137,7 +144,7 @@ func (engine *BaseEngine) prepareIsolatedBox(retry bool) error {
 		}
 		return engine.prepareIsolatedBox(false)
 	}
-	return err
+	return utils.NewError(err, "Initializing isolate box")
 }
 
 // Reads the content of the meta file created during the execution of the request.
