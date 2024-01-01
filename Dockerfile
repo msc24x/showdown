@@ -18,10 +18,11 @@ ENV APP_DIR /showdown
 WORKDIR $APP_DIR
 
 COPY --from=build $APP_DIR/main server
-COPY --from=build $APP_DIR/tools/isolate/bin/isolate tools/isolate/bin/isolate
+COPY --from=build $APP_DIR/.env.paths .env.paths
 
+RUN mkdir -p tools/isolate/bin && cp $ISOLATE_PATH tools/isolate/bin/isolate
 RUN mkdir tmp
 
 ENV PATH=$PATH$COMPILERS_PATH
 
-CMD [ "sudo", "./server", "-start" ]
+CMD [ "sudo", "./server", "-start", "-paths", ".env.paths" ]

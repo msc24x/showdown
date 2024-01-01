@@ -6,6 +6,7 @@ import (
 	"log"
 	"msc24x/showdown/api"
 	"msc24x/showdown/config"
+	"msc24x/showdown/internal/engine"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,7 @@ var (
 	fStart bool
 	fPort  int
 	fHost  string
+	fPaths string
 )
 
 func parseEnv() {
@@ -29,6 +31,7 @@ func parseEnv() {
 	if env != "" {
 		config.ENV = env
 	}
+
 }
 
 func parseFlags() int {
@@ -36,7 +39,11 @@ func parseFlags() int {
 	flag.BoolVar(&fStart, "start", false, "Start server to listen to requests")
 	flag.IntVar(&fPort, "p", config.PORT, "Specify port to listen on")
 	flag.StringVar(&fHost, "h", config.HOST, "Specify address to listen on")
+	flag.StringVar(&fPaths, "paths", config.PATHS_FILE, "Specify .env file path to override defaults")
 	flag.Parse()
+
+	config.PATHS_FILE = fPaths
+	engine.ImportPaths()
 
 	if fHelp {
 		return A_HELP
@@ -46,7 +53,7 @@ func parseFlags() int {
 	return A_DEFAULT
 }
 
-func setLogfile() *os.File {
+func initLogs() *os.File {
 	log.Println("Log file", config.LOG_FILE, "initializing...")
 
 	log_file, err := os.Create(config.LOG_FILE)
@@ -60,7 +67,7 @@ func setLogfile() *os.File {
 	return log_file
 }
 
-func startServer() {
+func initServer() {
 	router := gin.Default()
 	api.AttachHandlers(router)
 	address := fmt.Sprintf("%s:%d", fHost, fPort)
@@ -81,14 +88,13 @@ func printHelp() {
 }
 
 func main() {
-	printHeadline()
+	log_file := initLogs()
 	parseEnv()
 
 	if config.ENV == config.ENV_PROD {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	log_file := setLogfile()
 	defer log_file.Close()
 
 	action := parseFlags()
@@ -97,7 +103,7 @@ func main() {
 	case A_HELP:
 		printHelp()
 	case A_START:
-		startServer()
+		initServer()
 	case A_DEFAULT:
 		printHelp()
 		os.Exit(-1)

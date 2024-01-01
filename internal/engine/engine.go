@@ -122,7 +122,7 @@ func (engine *BaseEngine) prepareCommand() error {
 
 func (engine *BaseEngine) cleanIsolatedBox() error {
 	boxCleanupCmd := exec.Command(
-		config.ISOLATE_BIN, "--cg",
+		"sudo", config.ISOLATE_BIN, "--cg",
 		"-b", fmt.Sprintf("%d", engine.isolateBoxID),
 		"--cleanup",
 	)
@@ -133,7 +133,7 @@ func (engine *BaseEngine) cleanIsolatedBox() error {
 
 func (engine *BaseEngine) prepareIsolatedBox(retry bool) error {
 	boxInitCmd := exec.Command(
-		config.ISOLATE_BIN, "--cg",
+		"sudo", config.ISOLATE_BIN, "--cg",
 		"-b", fmt.Sprintf("%d", engine.isolateBoxID),
 		"--init",
 	)
@@ -158,6 +158,7 @@ func (engine *BaseEngine) CollectMeta() ([]byte, error) {
 // applies the compute and memory limits and returns a ready to execute exec.Command.
 func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec.Cmd, error) {
 	isolate_args := []string{
+		config.ISOLATE_BIN,
 		"-b", fmt.Sprintf("%d", engine.isolateBoxID),
 		"-p90",
 		"--cg",
@@ -185,7 +186,7 @@ func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec
 
 	isolate_args = append(isolate_args, "--run", "--", name)
 	isolate_args = append(isolate_args, args...)
-	isolate_cmd := exec.Command(config.ISOLATE_BIN, isolate_args...)
+	isolate_cmd := exec.Command("sudo", isolate_args...)
 
 	return isolate_cmd, nil
 }
