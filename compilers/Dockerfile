@@ -33,9 +33,6 @@ RUN cd Python-${PYTHON_VERSION} && \
 ENV COMPILERS_PATH=$COMPILERS_PATH:/opt/python/$PYTHON_VERSION/bin/
 
 # ISOLATE
-# RUN sudo touch /etc/defaut/grub
-# RUN sudo echo 'GRUB_CMDLINE_LINUX_DEFAULT="cgroup_enable=memory swapaccount=1"' > /etc/defaut/grub
-# RUN sudo update-grub
 RUN apt-get -y install git libcap-dev
 
 RUN git clone https://github.com/ioi/isolate && \

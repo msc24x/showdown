@@ -166,6 +166,7 @@ func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec
 		"-x", "0",
 		"--stderr-to-stdout",
 		"-s",
+		"-d", "/opt/python",
 		"-M", fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.Request.PID),
 		"--open-files", "90",
 		"-E", "HOME=/tmp",
