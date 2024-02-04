@@ -11,10 +11,11 @@ import (
 	"os/exec"
 	"reflect"
 	"strconv"
+
+	"github.com/google/uuid"
 )
 
 type ExecutionRequest struct {
-	PID      string `json:"pid"`
 	UID      string `json:"uid"`
 	Code     string `json:"code"`
 	Language string `json:"language"`
@@ -48,6 +49,7 @@ func (exeReq *ExecutionRequest) Validate() error {
 type BaseEngine struct {
 	Request *ExecutionRequest
 
+	PID          uuid.UUID
 	isolateBoxID int
 	languageInfo *Language // Language information fetched from ExecutionRequest
 	limits       *Limits   // Memory and compute limits during execution
@@ -83,9 +85,9 @@ type BaseEngineIsolate interface {
 
 func (engine *BaseEngine) prepareFiles() error {
 
-	file_name := fmt.Sprintf("%s.%s", engine.Request.PID, engine.Request.Language)
+	file_name := fmt.Sprintf("%s.%s", engine.PID.String(), engine.Request.Language)
 	engine.sourceFilePath = file_name
-	engine.inputFilePath = engine.Request.PID + ".txt"
+	engine.inputFilePath = engine.PID.String() + ".txt"
 
 	absSourceFilePath := fmt.Sprintf("%s/%s", engine.workDirectory, engine.sourceFilePath)
 	if err := os.WriteFile(absSourceFilePath, []byte(engine.Request.Code), 0644); err != nil {
@@ -149,7 +151,7 @@ func (engine *BaseEngine) prepareIsolatedBox(retry bool) error {
 
 // Reads the content of the meta file created during the execution of the request.
 func (engine *BaseEngine) CollectMeta() ([]byte, error) {
-	meta_file := fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.Request.PID)
+	meta_file := fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.PID.String())
 
 	return os.ReadFile(meta_file)
 }
@@ -166,8 +168,8 @@ func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec
 		"-x", "0",
 		"--stderr-to-stdout",
 		"-s",
-		"-d", "/opt/python",
-		"-M", fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.Request.PID),
+		"-d", "/opt",
+		"-M", fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.PID.String()),
 		"--open-files", "90",
 		"-E", "HOME=/tmp",
 		"-E", "PATH=$PATH"}
@@ -195,11 +197,12 @@ func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec
 // Initializes an isolated box by Isolate binary, puts the required files in
 // working directory created by the isolate and set the command and args
 // to be executed. This must be executed in order to use BaseEngine.
-func (engine *BaseEngine) Init(exe_req *ExecutionRequest) error {
+func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest) error {
 	engine.Request = exe_req
+	engine.PID = pid
 
-	pid, _ := strconv.Atoi(exe_req.PID)
-	engine.isolateBoxID = pid % config.MAX_ISOLATE_BOXES
+	uid, _ := strconv.Atoi(exe_req.UID)
+	engine.isolateBoxID = uid % config.MAX_ISOLATE_BOXES
 	engine.workDirectory = fmt.Sprintf("%s/%d/box", config.ISOLATE_WORKDIR, engine.isolateBoxID)
 
 	if err := engine.prepareIsolatedBox(true); err != nil {
@@ -244,7 +247,7 @@ func (engine *BaseEngine) Execute() ([]byte, error) {
 	if engine.languageInfo.BuildRequired {
 		engine.limits = DEF_EXEC
 		isolated_exec, _ := engine.getIsolatedCommand(
-			fmt.Sprintf("./%s", engine.Request.PID),
+			fmt.Sprintf("./%s", engine.PID.String()),
 		)
 
 		return isolated_exec.CombinedOutput()
@@ -257,9 +260,9 @@ func (engine *BaseEngine) Execute() ([]byte, error) {
 func (engine *BaseEngine) Clean() {
 	files_to_remove := []string{
 		fmt.Sprintf("%s/%s", engine.workDirectory, engine.sourceFilePath),
-		fmt.Sprintf("%s/%s", engine.workDirectory, engine.Request.PID),
-		fmt.Sprintf("%s/%s.txt", engine.workDirectory, engine.Request.PID),
-		fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.Request.PID),
+		fmt.Sprintf("%s/%s", engine.workDirectory, engine.PID.String()),
+		fmt.Sprintf("%s/%s.txt", engine.workDirectory, engine.PID.String()),
+		fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.PID.String()),
 	}
 
 	for _, file := range files_to_remove {

@@ -2,26 +2,39 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"msc24x/showdown/internal/engine"
 	"msc24x/showdown/internal/judge"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Judge(c *gin.Context) {
-	var exe_req engine.ExecutionRequest
+type JudgeRequest struct {
+	JudgeParams judge.Params            `json:"judge_params"`
+	Exe         engine.ExecutionRequest `json:"exe"`
+}
 
-	if err := c.BindJSON((&exe_req)); err != nil {
+func Tmp(c *gin.Context) {
+	if b, err := io.ReadAll(c.Request.Body); err == nil {
+		fmt.Println(string(b))
+	}
+}
+
+func Judge(c *gin.Context) {
+	var req JudgeRequest
+
+	if err := c.BindJSON((&req)); err != nil {
 		WriteServerError(c, err.Error())
 		return
 	}
 
-	if err := exe_req.Validate(); err != nil {
+	if err := req.Exe.Validate(); err != nil {
 		WriteBadRequest(c, err.Error())
 		return
 	}
 
-	output, err := judge.JudgeExecutionRequest(&exe_req)
+	output, err := judge.JudgeExecutionRequest(&req.Exe, &req.JudgeParams)
 
 	if err != nil {
 		WriteServerError(c, err.Error())

@@ -5,6 +5,8 @@ import (
 	"msc24x/showdown/config"
 	"sync"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // An in memory runtime information and statistics of the Showdown
@@ -41,21 +43,18 @@ func GetState() *JudgeState {
 }
 
 // Record/verify an execution request
-func OnboardProcess(pid string, uid string) error {
+func OnboardProcess(uid string) (uuid.UUID, error) {
 	judge_state_mutex.Lock()
 	defer judge_state_mutex.Unlock()
 
 	if judge_state.ActiveProcesses >= config.MAX_ACTIVE_PROCESSES {
 		judge_state.DeniedProcesses++
-		return errors.New("too many requests")
+		return uuid.Nil, errors.New("too many requests")
 	}
 
-	if judge_state.processes[pid] {
-		judge_state.DeniedProcesses++
-		return errors.New("duplicate request")
-	}
+	pid := uuid.New()
 	judge_state.ActiveProcesses++
-	judge_state.processes[pid] = true
+	judge_state.processes[pid.String()] = true
 
 	_, found_user := judge_state.users[uid]
 
@@ -71,18 +70,18 @@ func OnboardProcess(pid string, uid string) error {
 		judge_state.MaxUsers = judge_state.ActiveUsers
 	}
 
-	return nil
+	return pid, nil
 }
 
 // Record the completion of an execution request
-func OffboardProcess(pid string, uid string) {
+func OffboardProcess(pid uuid.UUID, uid string) {
 	judge_state_mutex.Lock()
 	defer judge_state_mutex.Unlock()
 
-	if !judge_state.processes[pid] {
+	if !judge_state.processes[pid.String()] {
 		panic("recording a process completion that was not recorded")
 	}
-	delete(judge_state.processes, pid)
+	delete(judge_state.processes, pid.String())
 	judge_state.ActiveProcesses--
 	judge_state.TotalProcessed++
 

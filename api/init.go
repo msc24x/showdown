@@ -20,5 +20,6 @@ func WriteBadRequest(c *gin.Context, msg string) {
 func AttachHandlers(router *gin.Engine) {
 	log.Println("Attaching API handlers...")
 	router.POST("/judge", Judge)
+	router.POST("/tmp", Tmp)
 	router.GET("/stats", GetStats)
 }
