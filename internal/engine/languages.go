@@ -77,6 +77,7 @@ var SUPPORTED_LANGUAGES = []*Language{
 	&GOLANG,
 }
 
+// Import paths from file config.PATHS_FILE
 func ImportPaths() {
 	var (
 		path string
@@ -97,12 +98,10 @@ func ImportPaths() {
 		if path != "" {
 			if lang.RunnerPath != "" {
 				lang.RunnerPath = path
-				log.Println(lang.Format, "runner:\t", path)
 			}
 
 			if lang.CompilerPath != "" {
 				lang.CompilerPath = path
-				log.Println(lang.Format, "compiler:\t", path)
 			}
 		}
 	}

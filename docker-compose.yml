@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  showdown-server:
+    container_name: showdown-server
+    build: .
+    env_file:
+      - .env.paths
+    ports:
+      - "8080:8080"
+    privileged: true
+    restart: always
+    depends_on:
+      - showdown-mq
+
+  showdown-mq:
+    container_name: showdown-mq
+    image: rabbitmq:3.13.0-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=$RABBITMQ_DEFAULT_USER
+      - RABBITMQ_DEFAULT_PASS=$RABBITMQ_DEFAULT_USER
+    restart: always

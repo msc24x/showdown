@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Struct to define http request to showdown
 type JudgeRequest struct {
 	JudgeParams judge.Params            `json:"judge_params"`
 	Exe         engine.ExecutionRequest `json:"exe"`
@@ -17,7 +18,7 @@ type JudgeRequest struct {
 
 func Tmp(c *gin.Context) {
 	if b, err := io.ReadAll(c.Request.Body); err == nil {
-		fmt.Println(string(b))
+		fmt.Printf("Dummy webhook triggered with content of %d bytes\n", len(b))
 	}
 }
 
@@ -51,5 +52,4 @@ func GetStats(c *gin.Context) {
 	response, _ := json.Marshal(stats)
 
 	c.Writer.Write(response)
-
 }

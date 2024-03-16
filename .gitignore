@@ -1,5 +1,5 @@
-tmp/build-errors.log
-build/showdown.exe
-build/showdown
-tmp/app.log
-.env.winpaths
+tmp/
+build/
+.win.paths
+.wsl.paths
+.env.creds

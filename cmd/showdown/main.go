@@ -1,57 +1,18 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"io"
 	"log"
 	"msc24x/showdown/api"
 	"msc24x/showdown/config"
-	"msc24x/showdown/internal/engine"
+	"msc24x/showdown/internal/judge"
+	"msc24x/showdown/internal/mq"
+	"msc24x/showdown/internal/utils"
 	"os"
 
 	"github.com/gin-gonic/gin"
 )
-
-var (
-	A_DEFAULT = 0
-	A_HELP    = 1
-	A_START   = 2
-)
-var (
-	fHelp  bool
-	fStart bool
-	fPort  int
-	fHost  string
-	fPaths string
-)
-
-func parseEnv() {
-	env := os.Getenv("ENV")
-
-	if env != "" {
-		config.ENV = env
-	}
-
-}
-
-func parseFlags() int {
-	flag.BoolVar(&fHelp, "help", false, "See usage")
-	flag.BoolVar(&fStart, "start", false, "Start server to listen to requests")
-	flag.IntVar(&fPort, "p", config.PORT, "Specify port to listen on")
-	flag.StringVar(&fHost, "h", config.HOST, "Specify address to listen on")
-	flag.StringVar(&fPaths, "paths", config.PATHS_FILE, "Specify .env file path to override defaults")
-	flag.Parse()
-
-	config.PATHS_FILE = fPaths
-	engine.ImportPaths()
-
-	if fHelp {
-		return A_HELP
-	} else if fStart {
-		return A_START
-	}
-	return A_DEFAULT
-}
 
 func initLogs() *os.File {
 	log.Println("Log file", config.LOG_FILE, "initializing...")
@@ -62,40 +23,47 @@ func initLogs() *os.File {
 		log.Fatal(err)
 	}
 
-	log.SetOutput(log_file)
+	if config.ENV == config.ENV_PROD {
+		log.SetOutput(log_file)
+	} else {
+		log_stream := io.MultiWriter(os.Stdout, log_file)
+		log.SetOutput(log_stream)
+	}
+
+	log.SetPrefix("[SHOWDOWN-0] ")
 
 	return log_file
 }
 
 func initServer() {
+	log_file := initLogs()
+	defer log_file.Close()
+
 	router := gin.Default()
+
+	if config.ACCESS_TOKEN == "" {
+		utils.LogWarn("Connection not restricted, consider using ACCESS_TOKEN.")
+	} else {
+		router.Use(api.AccessToken())
+	}
+
+	closeConnection := mq.InitMessageQueue()
+	defer closeConnection()
+
+	judge.InitQueueWorker()
+
 	api.AttachHandlers(router)
 	address := fmt.Sprintf("%s:%d", fHost, fPort)
-
 	log.Println("Listening on", address)
 	router.Run(address)
 }
 
-func printHeadline() {
-	fmt.Printf("Showdown! https://github.com/msc24x/showdown\nPortable server to execute and judge code.\n")
-}
-
-func printHelp() {
-	printHeadline()
-	fmt.Println("\nUsage:\n\t./showdown [...options] -start")
-	fmt.Println("\nOptions:")
-	flag.PrintDefaults()
-}
-
 func main() {
-	log_file := initLogs()
 	parseEnv()
 
 	if config.ENV == config.ENV_PROD {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
-	defer log_file.Close()
 
 	action := parseFlags()
 
@@ -106,7 +74,7 @@ func main() {
 		initServer()
 	case A_DEFAULT:
 		printHelp()
-		os.Exit(-1)
+		os.Exit(1)
 	}
 
 }

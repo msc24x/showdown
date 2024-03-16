@@ -5,18 +5,17 @@ package engine
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"msc24x/showdown/config"
 	"msc24x/showdown/internal/utils"
 	"os"
 	"os/exec"
 	"reflect"
-	"strconv"
 
 	"github.com/google/uuid"
 )
 
 type ExecutionRequest struct {
-	UID      string `json:"uid"`
 	Code     string `json:"code"`
 	Language string `json:"language"`
 	Input    string `json:"input"`
@@ -102,6 +101,7 @@ func (engine *BaseEngine) prepareFiles() error {
 	return nil
 }
 
+// Loads required envs and command args based on the language of the request.
 func (engine *BaseEngine) prepareCommand() error {
 	engine.languageInfo = GetLanguageInfo(&engine.Request.Language)
 
@@ -122,6 +122,7 @@ func (engine *BaseEngine) prepareCommand() error {
 	return nil
 }
 
+// Cleans up the isolate box directories
 func (engine *BaseEngine) cleanIsolatedBox() error {
 	boxCleanupCmd := exec.Command(
 		"sudo", config.ISOLATE_BIN, "--cg",
@@ -201,8 +202,8 @@ func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest) error {
 	engine.Request = exe_req
 	engine.PID = pid
 
-	uid, _ := strconv.Atoi(exe_req.UID)
-	engine.isolateBoxID = uid % config.MAX_ISOLATE_BOXES
+	box_id := rand.Intn(config.MAX_ISOLATE_BOXES)
+	engine.isolateBoxID = box_id % config.MAX_ISOLATE_BOXES
 	engine.workDirectory = fmt.Sprintf("%s/%d/box", config.ISOLATE_WORKDIR, engine.isolateBoxID)
 
 	if err := engine.prepareIsolatedBox(true); err != nil {
