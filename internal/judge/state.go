@@ -9,6 +9,15 @@ import (
 	"github.com/google/uuid"
 )
 
+type InstanceStats struct {
+	InstanceId   int
+	InstanceType string
+	Private      bool
+
+	JudgeStats *JudgeState
+	Workers    []*ShowdownWorker
+}
+
 // An in memory runtime information and statistics of the Showdown
 type JudgeState struct {
 	Started time.Time

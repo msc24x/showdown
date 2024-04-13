@@ -30,7 +30,7 @@ func initLogs() *os.File {
 		log.SetOutput(log_stream)
 	}
 
-	log.SetPrefix("[SHOWDOWN-0] ")
+	log.SetPrefix(fmt.Sprintf("[SHOWDOWN-%s-%d] ", config.INSTANCE_TYPE, config.INSTANCE_ID))
 
 	return log_file
 }
@@ -47,15 +47,19 @@ func initServer() {
 		router.Use(api.AccessToken())
 	}
 
-	closeConnection := mq.InitMessageQueue()
-	defer closeConnection()
-
-	judge.InitQueueWorker()
-
 	api.AttachHandlers(router)
+
+	if config.INSTANCE_TYPE != config.T_MANAGER {
+		judge.PingManager(config.MANAGER_INSTANCE_ADDRESS)
+		closeConnection := mq.InitMessageQueue()
+		defer closeConnection()
+		judge.InitQueueWorker()
+	}
+
 	address := fmt.Sprintf("%s:%d", fHost, fPort)
-	log.Println("Listening on", address)
+	log.Printf("Started Showdown %s-%d on %s", config.INSTANCE_TYPE, config.INSTANCE_ID, address)
 	router.Run(address)
+
 }
 
 func main() {

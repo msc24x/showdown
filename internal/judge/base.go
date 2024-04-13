@@ -2,6 +2,8 @@
 package judge
 
 import (
+	"errors"
+	"msc24x/showdown/config"
 	"msc24x/showdown/internal/engine"
 )
 
@@ -33,6 +35,14 @@ type Params struct {
 
 	// set this to true and Showdown will only execute the code, not judge
 	DoNotJudge bool `json:"donotjudge`
+}
+
+func (params *Params) Validate() error {
+	if params.Webhook == "" && config.INSTANCE_TYPE == config.T_MANAGER {
+		return errors.New("Webhook is mandatory for Showdown Manager instance")
+	}
+
+	return nil
 }
 
 // Entrypoint for an HTTP execution request

@@ -7,13 +7,13 @@ import (
 )
 
 // Prints log as a warning
-func LogWarn(msg string) {
-	log.Printf("[WARNING] %s", msg)
+func LogWarn(fmsg string, a ...any) {
+	log.Printf("[WARNING] %s", fmt.Sprintf(fmsg, a...))
 }
 
 // Prints log for worker methods
-func LogWorker(msg string, a ...any) {
-	log.Printf("[WORKER] %s", fmt.Sprintf(msg, a...))
+func LogWorker(fmsg string, a ...any) {
+	log.Printf("[WORKER] %s", fmt.Sprintf(fmsg, a...))
 }
 
 // Creates a prefixed error object from string message

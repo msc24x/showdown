@@ -24,11 +24,12 @@ const (
 	T_WORKER     = "worker"
 )
 
-// Subject to change in response to process flags or envs
 var (
-	ACCESS_TOKEN  = ""
-	INSTANCE_ID   = 0
-	INSTANCE_TYPE = T_STANDALONE
+	ACCESS_TOKEN             = ""
+	INSTANCE_ID              = 1
+	MANAGER_INSTANCE_ID      = 0
+	MANAGER_INSTANCE_ADDRESS = ""
+	INSTANCE_TYPE            = T_STANDALONE
 
 	HOST       = "0.0.0.0"
 	PORT       = 8080

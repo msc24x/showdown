@@ -2,6 +2,7 @@ package api
 
 import (
 	"log"
+	"msc24x/showdown/config"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +20,11 @@ func WriteBadRequest(c *gin.Context, msg string) {
 // Initializes the API routes
 func AttachHandlers(router *gin.Engine) {
 	log.Println("Attaching API handlers...")
-	router.POST("/judge", Judge)
+
+	if config.INSTANCE_TYPE != config.T_WORKER {
+		router.POST("/judge", Judge)
+	}
+
 	router.POST("/tmp", Tmp)
 	router.GET("/stats", GetStats)
 }

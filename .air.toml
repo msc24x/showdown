@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "build/showdown -start -p 8080 -paths .wsl.paths -creds .env.creds"
+  bin = "build/showdown -start -m -p 8080 -paths .wsl.paths -creds .env.creds"
   cmd = "/usr/local/go/bin/go build -buildvcs=false -o ./build/showdown ./cmd/showdown"
   delay = 500
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "files"]

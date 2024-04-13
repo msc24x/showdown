@@ -4,13 +4,27 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"msc24x/showdown/config"
 	"msc24x/showdown/internal/mq"
 	"msc24x/showdown/internal/utils"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+func PingManager(url string) {
+	stats, err := authenticateWorker(url, config.T_MANAGER)
+
+	if err != nil {
+		fmt.Printf("%s\nFailed to ping the manager on %s\n", err.Error(), url)
+		os.Exit(1)
+	}
+
+	config.MANAGER_INSTANCE_ID = stats.InstanceId
+	utils.LogWorker("Connected to manager instance %d running on %s", stats.InstanceId, url)
+}
 
 func logProcess(pid string, msg string, a ...any) {
 	utils.LogWorker("Process ID %s: %s", pid, fmt.Sprintf(msg, a...))
