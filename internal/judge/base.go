@@ -34,12 +34,12 @@ type Params struct {
 	Webhook string `json:"webhook"`
 
 	// set this to true and Showdown will only execute the code, not judge
-	DoNotJudge bool `json:"donotjudge`
+	DoNotJudge bool `json:"donotjudge"`
 }
 
 func (params *Params) Validate() error {
 	if params.Webhook == "" && config.INSTANCE_TYPE == config.T_MANAGER {
-		return errors.New("Webhook is mandatory for Showdown Manager instance")
+		return errors.New("webhook is mandatory for showdown manager instance")
 	}
 
 	return nil

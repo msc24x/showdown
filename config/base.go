@@ -4,6 +4,7 @@ const (
 	LOG_FILE             = "tmp/app.log"
 	ENGINE_WORKDIR       = "files"
 	MAX_ACTIVE_PROCESSES = 5
+	MAX_WORKER_RETRIES   = 6
 
 	ISOLATE_BIN       = "tools/isolate/bin/isolate"
 	ISOLATE_WORKDIR   = "/var/local/lib/isolate"
@@ -31,6 +32,7 @@ var (
 	MANAGER_INSTANCE_ADDRESS = ""
 	INSTANCE_TYPE            = T_STANDALONE
 
+	PROTOCOL   = "http"
 	HOST       = "0.0.0.0"
 	PORT       = 8080
 	ENV        = ENV_DEV

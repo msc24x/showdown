@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type InstanceStats struct {
+type InstanceState struct {
 	InstanceId   int
 	InstanceType string
 	Private      bool

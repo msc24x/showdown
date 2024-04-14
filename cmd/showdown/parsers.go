@@ -53,11 +53,11 @@ func parseFlags() int {
 	flag.BoolVar(&fStart, "start", false, "Start showdown")
 	flag.BoolVar(&fManager, "m", false, "Start showdown as a manager instance")
 	flag.BoolVar(&fWorker, "w", false, "Start showdown as a worker instance")
-	flag.StringVar(&fManagerAddress, "c", "http://localhost:8080", "Provide manager instance address")
+	flag.StringVar(&fManagerAddress, "c", "http://localhost:8080", "Provide manager instance address (-w required)")
 	flag.IntVar(&fPort, "p", config.PORT, "Specify port to listen on")
 	flag.StringVar(&fHost, "h", config.HOST, "Specify address to listen on")
 	flag.StringVar(&fPaths, "paths", config.PATHS_FILE, "Specify .env file path to override defaults")
-	flag.StringVar(&fCreds, "creds", config.PATHS_FILE, "Specify .env file path to override defaults")
+	flag.StringVar(&fCreds, "creds", config.PATHS_FILE, "Specify .env file path to override defaults for standalone or worker instance")
 	flag.Parse()
 
 	if fWorker {
@@ -67,11 +67,16 @@ func parseFlags() int {
 		config.INSTANCE_TYPE = config.T_MANAGER
 	}
 
+	config.PORT = fPort
+	config.HOST = fHost
+
 	config.CREDS_FILE = fCreds
 	parseCreds()
 
-	config.PATHS_FILE = fPaths
-	engine.ImportPaths()
+	if config.INSTANCE_TYPE != config.T_MANAGER {
+		config.PATHS_FILE = fPaths
+		engine.ImportPaths()
+	}
 
 	if fHelp {
 		return A_HELP

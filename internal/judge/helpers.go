@@ -136,7 +136,7 @@ func queueRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Param
 	go mq.Queue("executables", 3, process_body)
 }
 
-func authenticateWorker(instance_url string, expect_type string) (*InstanceStats, error) {
+func AuthenticateInstance(instance_url string, expect_type string) (*InstanceState, error) {
 	ping_url := fmt.Sprintf("%s/stats", instance_url)
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", ping_url, nil)
@@ -158,20 +158,20 @@ func authenticateWorker(instance_url string, expect_type string) (*InstanceStats
 
 	defer res.Body.Close()
 
-	stats := InstanceStats{}
-	err = json.NewDecoder(res.Body).Decode(&stats)
+	state := InstanceState{}
+	err = json.NewDecoder(res.Body).Decode(&state)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if stats.InstanceType != expect_type {
-		return nil, fmt.Errorf("cannot connect to %s instance when %s is expected", stats.InstanceType, expect_type)
+	if state.InstanceType != expect_type {
+		return nil, fmt.Errorf("cannot connect to %s instance when %s is expected", state.InstanceType, expect_type)
 	}
 
-	if !stats.Private && decline_public {
+	if !state.Private && decline_public {
 		return nil, errors.New("cannot connect to an open instance when access token is set")
 	}
 
-	return &stats, err
+	return &state, err
 }

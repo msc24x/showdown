@@ -27,7 +27,7 @@ func Judge(c *gin.Context) {
 	var req JudgeRequest
 
 	if err := c.BindJSON((&req)); err != nil {
-		WriteServerError(c, err.Error())
+		WriteBadRequest(c, err.Error())
 		return
 	}
 
@@ -52,10 +52,43 @@ func Judge(c *gin.Context) {
 
 }
 
+func RegisterWorker(c *gin.Context) {
+	judge.Workers_mutex.Lock()
+	defer judge.Workers_mutex.Unlock()
+
+	var req judge.WorkerRegisteration
+
+	if err := c.BindJSON(&req); err != nil {
+		WriteBadRequest(c, err.Error())
+		return
+	}
+
+	_, err := judge.AuthenticateInstance(req.Address, config.T_WORKER)
+
+	if err != nil {
+		WriteBadRequest(c, err.Error())
+		return
+	}
+
+	res := judge.WorkerRegisterationResponse{
+		AssignedInstanceId: judge.GetMaxWorkerId() + 1,
+	}
+
+	response, _ := json.Marshal(res)
+
+	judge.AddWorker(&judge.ShowdownWorker{
+		InstanceId:    res.AssignedInstanceId,
+		Address:       req.Address,
+		Authenticated: true,
+	})
+
+	c.Writer.Write(response)
+}
+
 func GetStats(c *gin.Context) {
 	stats := judge.GetState()
 
-	res := judge.InstanceStats{
+	res := judge.InstanceState{
 		InstanceId:   config.INSTANCE_ID,
 		InstanceType: config.INSTANCE_TYPE,
 		Private:      config.ACCESS_TOKEN != "",

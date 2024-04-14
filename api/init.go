@@ -25,6 +25,10 @@ func AttachHandlers(router *gin.Engine) {
 		router.POST("/judge", Judge)
 	}
 
+	if config.INSTANCE_TYPE == config.T_MANAGER {
+		router.POST("/workers/register", RegisterWorker)
+	}
+
 	router.POST("/tmp", Tmp)
 	router.GET("/stats", GetStats)
 }

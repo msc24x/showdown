@@ -42,24 +42,39 @@ func initServer() {
 	router := gin.Default()
 
 	if config.ACCESS_TOKEN == "" {
-		utils.LogWarn("Connection not restricted, consider using ACCESS_TOKEN.")
+		utils.LogWarn("Connection not restricted, consider using ACCESS_TOKEN")
+
+		if config.INSTANCE_TYPE != config.T_STANDALONE {
+			log.Fatalln("Role based instances must use ACCESS_TOKEN")
+		}
+
 	} else {
 		router.Use(api.AccessToken())
 	}
 
 	api.AttachHandlers(router)
 
+	closeConnection := mq.InitMessageQueue()
+	defer closeConnection()
+
 	if config.INSTANCE_TYPE != config.T_MANAGER {
-		judge.PingManager(config.MANAGER_INSTANCE_ADDRESS)
-		closeConnection := mq.InitMessageQueue()
-		defer closeConnection()
 		judge.InitQueueWorker()
+	}
+
+	if config.INSTANCE_TYPE == config.T_MANAGER {
+		judge.InitWorkersTicker()
 	}
 
 	address := fmt.Sprintf("%s:%d", fHost, fPort)
 	log.Printf("Started Showdown %s-%d on %s", config.INSTANCE_TYPE, config.INSTANCE_ID, address)
-	router.Run(address)
+	go func() {
+		if config.INSTANCE_TYPE == config.T_WORKER {
+			judge.RegisterWorker(config.MANAGER_INSTANCE_ADDRESS)
+			log.SetPrefix(fmt.Sprintf("[SHOWDOWN-%s-%d] ", config.INSTANCE_TYPE, config.INSTANCE_ID))
+		}
+	}()
 
+	router.Run(address)
 }
 
 func main() {

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"msc24x/showdown/config"
 	"msc24x/showdown/internal/mq"
 	"msc24x/showdown/internal/utils"
@@ -14,16 +16,61 @@ import (
 	"github.com/google/uuid"
 )
 
-func PingManager(url string) {
-	stats, err := authenticateWorker(url, config.T_MANAGER)
+type WorkerRegisteration struct {
+	Address string
+}
 
-	if err != nil {
-		fmt.Printf("%s\nFailed to ping the manager on %s\n", err.Error(), url)
+type WorkerRegisterationResponse struct {
+	AssignedInstanceId int
+}
+
+func RegisterWorker(url string) {
+	failIf := func(err error, context string) {
+		if err != nil {
+			utils.LogWorker("%s\nFailed to %s the manager on %s\n", err.Error(), context, url)
+			os.Exit(1)
+		}
+	}
+
+	stats, err := AuthenticateInstance(url, config.T_MANAGER)
+	failIf(err, "ping")
+
+	config.MANAGER_INSTANCE_ID = stats.InstanceId
+	utils.LogWorker("Ping successful to manager instance %d running on %s", stats.InstanceId, url)
+
+	req_body_struct := WorkerRegisteration{
+		Address: fmt.Sprintf("%s://%s:%d", config.PROTOCOL, config.HOST, config.PORT),
+	}
+
+	req_body_bytes, err := json.Marshal(req_body_struct)
+	utils.PanicIf(err)
+
+	register_url := fmt.Sprintf("%s/workers/register", url)
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", register_url, bytes.NewBuffer(req_body_bytes))
+	failIf(err, "connect")
+
+	req.Header.Set("Access-Token", config.ACCESS_TOKEN)
+	res, err := client.Do(req)
+	failIf(err, "connect")
+
+	if res.StatusCode != 200 {
+		res_bytes, err := io.ReadAll(res.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		utils.LogWorker("%s : Failed to connect to the manager on %s\n", string(res_bytes), url)
 		os.Exit(1)
 	}
 
-	config.MANAGER_INSTANCE_ID = stats.InstanceId
-	utils.LogWorker("Connected to manager instance %d running on %s", stats.InstanceId, url)
+	res_obj := WorkerRegisterationResponse{}
+	err = json.NewDecoder(res.Body).Decode(&res_obj)
+	failIf(err, "connect")
+
+	config.INSTANCE_ID = res_obj.AssignedInstanceId
+
+	utils.LogWorker("Connection with manager instance %d running on %s successful", stats.InstanceId, url)
 }
 
 func logProcess(pid string, msg string, a ...any) {

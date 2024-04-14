@@ -3,6 +3,7 @@ package mq
 import (
 	"context"
 	"fmt"
+	"log"
 	"msc24x/showdown/config"
 	"msc24x/showdown/internal/utils"
 	"time"
@@ -27,6 +28,8 @@ func declareQueues(names ...string) {
 		)
 		utils.PanicIf(err)
 		queues[name] = &q_exe
+
+		log.Printf("Decalared RabbitMQ queue '%s'", name)
 	}
 }
 
@@ -59,6 +62,10 @@ func Queue(q_name string, retries int, body []byte) {
 	defer cancel()
 
 	queue := queues[q_name]
+
+	if queue == nil {
+		log.Fatalf("Trying to queue to undecalared queue '%s'", q_name)
+	}
 
 	err := channel.PublishWithContext(ctx,
 		"",
