@@ -241,7 +241,6 @@ func (engine *BaseEngine) Execute() ([]byte, error) {
 	output, err := isolated_cmd.CombinedOutput()
 
 	if err != nil {
-		fmt.Println(string(output), err.Error())
 		return output, err
 	}
 

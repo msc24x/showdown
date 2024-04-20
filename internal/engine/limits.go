@@ -10,14 +10,14 @@ type Limits struct {
 
 var (
 	DEF_CMPL = &Limits{
-		Time:     3,
-		WallTime: 5,
+		Time:     2,
+		WallTime: 4,
 		Memory:   20 * 1000,
 		Stack:    -1,
 	}
 	DEF_EXEC = &Limits{
-		Time:     10,
-		WallTime: 15,
+		Time:     2,
+		WallTime: 3,
 		Memory:   256 * 1000,
 		Stack:    -1,
 	}

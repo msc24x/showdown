@@ -63,13 +63,14 @@ func initServer() {
 
 	if config.INSTANCE_TYPE == config.T_MANAGER {
 		judge.InitWorkersTicker()
+		judge.RestoreManagerState()
 	}
 
 	address := fmt.Sprintf("%s:%d", fHost, fPort)
 	log.Printf("Started Showdown %s-%d on %s", config.INSTANCE_TYPE, config.INSTANCE_ID, address)
 	go func() {
 		if config.INSTANCE_TYPE == config.T_WORKER {
-			judge.RegisterWorker(config.MANAGER_INSTANCE_ADDRESS)
+			judge.ConnectManager(config.MANAGER_INSTANCE_ADDRESS)
 			log.SetPrefix(fmt.Sprintf("[SHOWDOWN-%s-%d] ", config.INSTANCE_TYPE, config.INSTANCE_ID))
 		}
 	}()

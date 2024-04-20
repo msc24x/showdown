@@ -17,13 +17,19 @@ type JudgeRequest struct {
 	Exe         engine.ExecutionRequest `json:"exe"`
 }
 
-func Tmp(c *gin.Context) {
+func DebugWebhook(c *gin.Context) {
 	if b, err := io.ReadAll(c.Request.Body); err == nil {
-		fmt.Printf("Dummy webhook triggered with content of %d bytes\n", len(b))
+		fmt.Printf("Debug webhook triggered with content of %d bytes\n", len(b))
+		// log.Println(string(b))
 	}
 }
 
 func Judge(c *gin.Context) {
+	if config.INSTANCE_TYPE == config.T_WORKER {
+		WriteBadRequest(c, "Not allowed on worker instance")
+		return
+	}
+
 	var req JudgeRequest
 
 	if err := c.BindJSON((&req)); err != nil {
@@ -53,10 +59,15 @@ func Judge(c *gin.Context) {
 }
 
 func RegisterWorker(c *gin.Context) {
+	if config.INSTANCE_TYPE != config.T_MANAGER {
+		WriteBadRequest(c, "Not allowed on non manager instances")
+		return
+	}
+
 	judge.Workers_mutex.Lock()
 	defer judge.Workers_mutex.Unlock()
 
-	var req judge.WorkerRegisteration
+	var req judge.WorkerRegistration
 
 	if err := c.BindJSON(&req); err != nil {
 		WriteBadRequest(c, err.Error())
@@ -70,36 +81,22 @@ func RegisterWorker(c *gin.Context) {
 		return
 	}
 
-	res := judge.WorkerRegisterationResponse{
+	res := judge.WorkerRegistrationResponse{
 		AssignedInstanceId: judge.GetMaxWorkerId() + 1,
 	}
 
-	response, _ := json.Marshal(res)
-
 	judge.AddWorker(&judge.ShowdownWorker{
-		InstanceId:    res.AssignedInstanceId,
-		Address:       req.Address,
-		Authenticated: true,
+		InstanceId: res.AssignedInstanceId,
+		Address:    req.Address,
 	})
+
+	response, _ := json.Marshal(res)
 
 	c.Writer.Write(response)
 }
 
-func GetStats(c *gin.Context) {
-	stats := judge.GetState()
-
-	res := judge.InstanceState{
-		InstanceId:   config.INSTANCE_ID,
-		InstanceType: config.INSTANCE_TYPE,
-		Private:      config.ACCESS_TOKEN != "",
-	}
-
-	if config.INSTANCE_TYPE != config.T_MANAGER {
-		res.JudgeStats = stats
-	} else if config.INSTANCE_TYPE != config.T_WORKER {
-		res.Workers = judge.GetWorkers(true)
-	}
-
+func Status(c *gin.Context) {
+	res := judge.GetInstanceState()
 	response, _ := json.Marshal(res)
 
 	c.Writer.Write(response)

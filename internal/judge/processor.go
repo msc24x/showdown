@@ -1,13 +1,7 @@
 package judge
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"msc24x/showdown/config"
 	"msc24x/showdown/internal/engine"
-	"msc24x/showdown/internal/mq"
-	"net/http"
 
 	"github.com/google/uuid"
 )
@@ -93,7 +87,7 @@ func judgeLines(test [][]rune, truth [][]rune) bool {
 	return true
 }
 
-// Executes and judge (optional) the execution request syncronously
+// Executes and judge (optional) the execution request synchronously
 func processRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Params, response *ExecutionResponse) error {
 	engine := engine.BaseEngine{}
 
@@ -123,55 +117,4 @@ func processRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Par
 	}
 
 	return nil
-}
-
-// Takes the execution request and queues it into rabbit mq queue
-func queueRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Params) {
-	process_obj := ExecutionProcess{
-		PID:     pid.String(),
-		Request: *exe_req,
-		Params:  *params,
-	}
-	process_body, _ := json.Marshal(process_obj)
-	go mq.Queue("executables", 3, process_body)
-}
-
-func AuthenticateInstance(instance_url string, expect_type string) (*InstanceState, error) {
-	ping_url := fmt.Sprintf("%s/stats", instance_url)
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", ping_url, nil)
-	decline_public := config.ACCESS_TOKEN != ""
-
-	if err != nil {
-		return nil, err
-	}
-
-	if decline_public {
-		req.Header.Set("Access-Token", config.ACCESS_TOKEN)
-	}
-
-	res, err := client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer res.Body.Close()
-
-	state := InstanceState{}
-	err = json.NewDecoder(res.Body).Decode(&state)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if state.InstanceType != expect_type {
-		return nil, fmt.Errorf("cannot connect to %s instance when %s is expected", state.InstanceType, expect_type)
-	}
-
-	if !state.Private && decline_public {
-		return nil, errors.New("cannot connect to an open instance when access token is set")
-	}
-
-	return &state, err
 }

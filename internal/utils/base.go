@@ -33,3 +33,11 @@ func PanicIf(err error) {
 		panic(msg)
 	}
 }
+
+func BPanicIf(flag bool, freason string, fargs ...any) {
+	if flag {
+		msg := NewError(errors.New(fmt.Sprintf(freason, fargs...)), "PANIC").Error()
+		LogWarn(msg)
+		panic(msg)
+	}
+}

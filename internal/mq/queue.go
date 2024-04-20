@@ -29,7 +29,7 @@ func declareQueues(names ...string) {
 		utils.PanicIf(err)
 		queues[name] = &q_exe
 
-		log.Printf("Decalared RabbitMQ queue '%s'", name)
+		log.Printf("Declared RabbitMQ queue '%s'", name)
 	}
 }
 
@@ -64,7 +64,7 @@ func Queue(q_name string, retries int, body []byte) {
 	queue := queues[q_name]
 
 	if queue == nil {
-		log.Fatalf("Trying to queue to undecalared queue '%s'", q_name)
+		log.Fatalf("Trying to queue to undeclared queue '%s'", q_name)
 	}
 
 	err := channel.PublishWithContext(ctx,

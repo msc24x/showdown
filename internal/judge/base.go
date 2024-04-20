@@ -2,9 +2,13 @@
 package judge
 
 import (
+	"encoding/json"
 	"errors"
 	"msc24x/showdown/config"
 	"msc24x/showdown/internal/engine"
+	"msc24x/showdown/internal/mq"
+
+	"github.com/google/uuid"
 )
 
 // Internal struct to conveniently pass execution response, params and pid
@@ -15,7 +19,7 @@ type ExecutionProcess struct {
 	Params  Params                  `json:"params"`
 }
 
-// Struc to define the end results the users will recieve
+// Struct to define the end results the users will receive
 type ExecutionResponse struct {
 	PID         string `json:"pid"`
 	Webhook     string `json:"webhook"`
@@ -47,13 +51,7 @@ func (params *Params) Validate() error {
 
 // Entrypoint for an HTTP execution request
 func JudgeExecutionRequest(exe_req *engine.ExecutionRequest, params *Params) (*ExecutionResponse, error) {
-
-	pid, err := OnboardProcess()
-	if err != nil {
-		return nil, err
-	}
-	defer OffboardProcess(pid)
-
+	pid := uuid.New()
 	response := ExecutionResponse{}
 	response.PID = pid.String()
 	response.Webhook = params.Webhook
@@ -63,11 +61,22 @@ func JudgeExecutionRequest(exe_req *engine.ExecutionRequest, params *Params) (*E
 		return &response, nil
 	}
 
-	err = processRequest(pid, exe_req, params, &response)
+	err := processRequest(pid, exe_req, params, &response)
 
 	if err != nil {
 		return &response, err
 	}
 
 	return &response, nil
+}
+
+// Takes the execution request and queues it into rabbit mq queue
+func queueRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Params) {
+	process_obj := ExecutionProcess{
+		PID:     pid.String(),
+		Request: *exe_req,
+		Params:  *params,
+	}
+	process_body, _ := json.Marshal(process_obj)
+	go mq.Queue("executables", 3, process_body)
 }
