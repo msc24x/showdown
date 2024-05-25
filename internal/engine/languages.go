@@ -16,10 +16,14 @@ type Language struct {
 	RunnerPath    string
 	CompilerPath  string
 
-	DefaultEnvs  []string
-	SubCommands  []string
-	DefaultFlags []string
+	DefaultEnvs []string
+	SubCommands []string
 }
+
+const (
+	CMD_FILE = "__SHDN_FILE"
+	CMD_OUT  = "__SHDN_OUT"
+)
 
 var (
 	PYTHON = Language{
@@ -31,10 +35,11 @@ var (
 	}
 	CPP = Language{
 		Format:        config.CPP,
-		BuildRequired: false,
+		BuildRequired: true,
 		RunnerPath:    "",
 		CompilerPath:  "g++",
 		Supported:     true,
+		SubCommands:   []string{CMD_FILE, "-o", CMD_OUT},
 	}
 	C = Language{
 		Format:        config.C,
@@ -42,6 +47,7 @@ var (
 		RunnerPath:    "",
 		CompilerPath:  "gcc",
 		Supported:     true,
+		SubCommands:   []string{CMD_FILE, "-o", CMD_OUT},
 	}
 	JAVASCRIPT = Language{
 		Format:        config.JAVASCRIPT,
@@ -60,11 +66,11 @@ var (
 	}
 	GOLANG = Language{
 		Format:        config.GOLANG,
-		BuildRequired: false,
-		RunnerPath:    "go",
+		BuildRequired: true,
+		RunnerPath:    "",
 		CompilerPath:  "go",
 		Supported:     true,
-		SubCommands:   []string{"run"},
+		SubCommands:   []string{"build"},
 	}
 )
 
@@ -77,17 +83,17 @@ var SUPPORTED_LANGUAGES = []*Language{
 	&GOLANG,
 }
 
-// Import paths from file config.PATHS_FILE
+// Import paths from file config.CONFIG_FILE
 func ImportPaths() {
 	var (
 		path string
 		key  string
 	)
 
-	paths, err := godotenv.Read(config.PATHS_FILE)
+	paths, err := godotenv.Read(config.CONFIG_FILE)
 
 	if err != nil {
-		log.Printf("Could not read file %s, continuing with defaults\n", config.PATHS_FILE)
+		log.Printf("Could not read file %s, continuing with defaults\n", config.CONFIG_FILE)
 		return
 	}
 

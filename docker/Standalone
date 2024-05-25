@@ -5,7 +5,7 @@ ENV APP_DIR /showdown
 COPY . $APP_DIR
 WORKDIR $APP_DIR
 
-RUN go build cmd/showdown/main.go
+RUN go build -o ./server ./cmd/showdown
 
 FROM msc24x/compilers AS server
 
@@ -16,8 +16,9 @@ RUN adduser showdown \
     && echo "showdown ALL=(ALL) NOPASSWD: ${APP_DIR}/server" >> /etc/sudoers
 
 
-COPY --from=build $APP_DIR/main server
-COPY --from=build $APP_DIR/.env.paths .env.paths
+COPY --from=build $APP_DIR/server server
+COPY --from=build $APP_DIR/.env.config .env.config
+COPY --from=build $APP_DIR/.env.creds .env.creds
 
 RUN chown -R showdown:1000 $APP_DIR
 
@@ -28,4 +29,4 @@ ENV PATH=$PATH$COMPILERS_PATH
 
 USER showdown
 
-CMD [ "sudo", "./server", "-start", "-paths", ".env.paths" ]
+CMD [ "sudo", "./server", "-start", "-config", ".env.config", "-creds", ".env.creds" ]

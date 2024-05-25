@@ -1,0 +1,17 @@
+FROM rabbitmq:3.13.0-management
+
+ENV RABBITMQ_USER ${RABBITMQ_DEFAULT_USER}
+ENV RABBITMQ_PASSWORD ${RABBITMQ_DEFAULT_PASS}
+
+ENV RABBIT_MQ_USER ${RABBIT_MQ_USER}
+ENV RABBIT_MQ_PASSWORD ${RABBIT_MQ_PASSWORD}
+
+ENV RABBITMQ_PID_FILE /var/lib/rabbitmq/mnesia/rabbitmq
+
+ADD scripts/init_queue.sh init_queue.sh
+RUN chmod +x init_queue.sh
+
+EXPOSE 15672
+EXPOSE 5672
+
+CMD ["./init_queue.sh"]

@@ -117,7 +117,20 @@ func (engine *BaseEngine) prepareCommand() error {
 
 	engine.envs = append(engine.envs, engine.languageInfo.DefaultEnvs...)
 	engine.commandArgs = append(engine.commandArgs, engine.languageInfo.SubCommands...)
-	engine.commandArgs = append(engine.commandArgs, engine.sourceFilePath)
+	sourceFileSet := false
+
+	for i, arg := range engine.commandArgs {
+		if arg == CMD_FILE {
+			engine.commandArgs[i] = engine.sourceFilePath
+			sourceFileSet = true
+		} else if arg == CMD_OUT {
+			engine.commandArgs[i] = engine.PID.String()
+		}
+	}
+
+	if !sourceFileSet {
+		engine.commandArgs = append(engine.commandArgs, engine.sourceFilePath)
+	}
 
 	return nil
 }
@@ -173,7 +186,7 @@ func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec
 		"-M", fmt.Sprintf("%s/%s.info", engine.workDirectory, engine.PID.String()),
 		"--open-files", "90",
 		"-E", "HOME=/tmp",
-		"-E", "PATH=$PATH"}
+		"-E", "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"}
 
 	if engine.limits.Memory != -1 {
 		isolate_args = append(isolate_args, "--cg-mem", fmt.Sprintf("%d", engine.limits.Memory))
@@ -202,8 +215,8 @@ func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest) error {
 	engine.Request = exe_req
 	engine.PID = pid
 
-	box_id := rand.Intn(config.MAX_ISOLATE_BOXES)
-	engine.isolateBoxID = box_id % config.MAX_ISOLATE_BOXES
+	box_id := rand.Intn(config.MAX_ACTIVE_PROCESSES)
+	engine.isolateBoxID = box_id % config.MAX_ACTIVE_PROCESSES
 	engine.workDirectory = fmt.Sprintf("%s/%d/box", config.ISOLATE_WORKDIR, engine.isolateBoxID)
 
 	if err := engine.prepareIsolatedBox(true); err != nil {

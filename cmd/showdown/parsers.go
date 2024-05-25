@@ -25,7 +25,7 @@ var (
 	fManagerAddress string
 	fPort           int
 	fHost           string
-	fPaths          string
+	fConfig         string
 	fCreds          string
 )
 
@@ -57,8 +57,8 @@ func parseFlags() int {
 	flag.StringVar(&fManagerAddress, "c", "http://localhost:8080", "Provide manager instance address (-w required)")
 	flag.IntVar(&fPort, "p", config.PORT, "Specify port to listen on")
 	flag.StringVar(&fHost, "h", config.HOST, "Specify address to listen on")
-	flag.StringVar(&fPaths, "paths", config.PATHS_FILE, "Specify .env file path to override defaults")
-	flag.StringVar(&fCreds, "creds", config.PATHS_FILE, "Specify .env file path to override defaults for standalone or worker instance")
+	flag.StringVar(&fConfig, "config", config.CONFIG_FILE, "Specify .env file path to override defaults")
+	flag.StringVar(&fCreds, "creds", config.CREDS_FILE, "Specify .env file path to override defaults for standalone or worker instance")
 	flag.Parse()
 
 	if fWorker {
@@ -75,7 +75,7 @@ func parseFlags() int {
 	parseCreds()
 
 	if config.INSTANCE_TYPE != config.T_MANAGER {
-		config.PATHS_FILE = fPaths
+		config.CONFIG_FILE = fConfig
 		engine.ImportPaths()
 	}
 

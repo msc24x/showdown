@@ -41,8 +41,15 @@ func InitWorkersTicker() {
 		}()
 	}
 
-	init(time.NewTicker(10*time.Second), SW_ACTIVE|SW_STALLED)
-	init(time.NewTicker(30*time.Minute), SW_DROPPED)
+	init(time.NewTicker(
+		time.Duration(config.ACTIVE_POLLING_RATE)*time.Second),
+		SW_ACTIVE|SW_STALLED,
+	)
+
+	init(time.NewTicker(
+		time.Duration(config.REVIVAL_POLLING_RATE)*time.Second),
+		SW_DROPPED,
+	)
 }
 
 func PingWorkers(status WorkerStatus) {

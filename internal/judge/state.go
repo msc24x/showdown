@@ -61,6 +61,15 @@ func RestoreManagerState() {
 	}
 
 	workers = instance_state.Workers
+
+	for _, worker := range workers {
+		if worker.Status == SW_STALLED {
+			worker.Retries = config.MAX_WORKER_RETRIES
+			worker.Status = SW_ACTIVE
+			worker.InactiveSince = time.Time{}
+		}
+	}
+
 	log.Println("restored previous manager state")
 
 	PingWorkers(SW_ACTIVE | SW_DROPPED | SW_STALLED)
