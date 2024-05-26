@@ -1,4 +1,4 @@
-FROM golang:1.20 AS build
+FROM golang:1.20
 
 ENV APP_DIR /showdown
 
@@ -10,14 +10,11 @@ RUN go build -o ./server ./cmd/showdown
 RUN adduser showdown \
     && echo "showdown ALL=(ALL) NOPASSWD: ${APP_DIR}/server" >> /etc/sudoers
 
-COPY --from=build $APP_DIR/server server
-COPY --from=build $APP_DIR/.env.config .env.config
-COPY --from=build $APP_DIR/.env.creds .env.creds
-
 RUN chown -R showdown:1000 $APP_DIR
 
-RUN mkdir tmp
+RUN mkdir -p tmp
+RUN mkdir -p env
 
 USER showdown
 
-CMD [ "sudo", "./server", "-start", "-m", "-config", ".env.config", "-creds", ".env.creds" ]
+CMD ["./server", "-start", "-m", "-config", "./env/.config"]

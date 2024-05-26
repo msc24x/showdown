@@ -93,7 +93,7 @@ func ImportPaths() {
 	paths, err := godotenv.Read(config.CONFIG_FILE)
 
 	if err != nil {
-		log.Printf("Could not read file %s, continuing with defaults\n", config.CONFIG_FILE)
+		log.Printf("Could not read file %s, continuing with default paths\n", config.CONFIG_FILE)
 		return
 	}
 

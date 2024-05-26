@@ -1,16 +1,9 @@
 package config
 
-import (
-	"log"
-	"strconv"
-
-	"github.com/joho/godotenv"
-)
-
 const (
 	DUMP_FILE            = "/var/lib/showdown/dump"
 	ENGINE_WORKDIR       = "/var/lib/showdown/files"
-	LOG_FILE             = "tmp/app.log"
+	LOG_FILE             = "/var/lib/showdown/log.log"
 	MAX_ACTIVE_PROCESSES = 5
 	MAX_WORKER_RETRIES   = 6
 
@@ -45,45 +38,13 @@ var (
 
 	PROTOCOL    = "http"
 	HOST        = "0.0.0.0"
-	PORT        = 8080
+	PORT        = 7070
 	ENV         = ENV_DEV
-	CONFIG_FILE = ".env.config"
-	CREDS_FILE  = ".env.creds"
+	CONFIG_FILE = "env/.config"
+	CREDS_FILE  = "env/.env.creds"
 
 	RABBIT_MQ_HOST     = "localhost"
 	RABBIT_MQ_PORT     = "5672"
 	RABBIT_MQ_USER     = "guest"
 	RABBIT_MQ_PASSWORD = "guest"
 )
-
-func ImportConfig() {
-	paths, err := godotenv.Read(CONFIG_FILE)
-
-	if err != nil {
-		log.Printf("Could not read file %s, continuing with defaults\n", CONFIG_FILE)
-		return
-	}
-
-	var (
-		conf_key string
-		// sbuff    string
-		ibuff int
-	)
-
-	conf_key = "ACTIVE_POLLING_RATE"
-	ibuff, err = strconv.Atoi(paths[conf_key])
-	if err != nil {
-		log.Printf("invalid %s", conf_key)
-	} else {
-		ACTIVE_POLLING_RATE = ibuff
-	}
-
-	conf_key = "REVIVAL_POLLING_RATE"
-	ibuff, err = strconv.Atoi(paths[conf_key])
-	if err != nil {
-		log.Printf("invalid %s", conf_key)
-	} else {
-		REVIVAL_POLLING_RATE = ibuff
-	}
-
-}

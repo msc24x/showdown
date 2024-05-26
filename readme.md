@@ -8,5 +8,5 @@
 docker stop showdown
 docker remove showdown
 docker build . -t showdown
-docker run --privileged --name showdown --env-file .env.paths -p 8080:8080 showdown
+docker run --privileged --name showdown --env-file .config -p 7070:7070 showdown
 ```

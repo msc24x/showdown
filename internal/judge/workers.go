@@ -53,6 +53,9 @@ func InitWorkersTicker() {
 }
 
 func PingWorkers(status WorkerStatus) {
+	Workers_mutex.Lock()
+	defer Workers_mutex.Unlock()
+
 	for _, worker := range GetWorkers(status) {
 		worker_url := worker.Address
 		state, err := AuthenticateInstance(worker_url, config.T_WORKER)
@@ -120,6 +123,11 @@ func AddWorker(instance *ShowdownWorker) {
 		instance.CreatedSince = time.Now()
 		workers = append(workers, instance)
 	} else {
+		if instance.InstanceId != worker.InstanceId {
+			log.Printf("worker-%d reconnected, connecting as worker-%d", worker.InstanceId, instance.InstanceId)
+			worker.InstanceId = instance.InstanceId
+		}
+
 		instance = worker
 	}
 
@@ -127,7 +135,7 @@ func AddWorker(instance *ShowdownWorker) {
 	instance.InactiveSince = time.Time{}
 	instance.Status = SW_ACTIVE
 
-	log.Printf("worker-%d authenticated", instance.InstanceId)
+	log.Printf("worker-%d (%s) authenticated", instance.InstanceId, instance.Address)
 }
 
 func GetMaxWorkerId() uint {

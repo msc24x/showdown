@@ -28,4 +28,4 @@ ENV PATH=$PATH$COMPILERS_PATH
 
 USER showdown
 
-CMD [ "sudo", "./server", "-start", "-config", "./env/.config"]
+CMD [ "sudo", "./server", "-start", "-w", "-config", "./env/.config" ]

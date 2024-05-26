@@ -17,10 +17,14 @@ import (
 func initLogs() *os.File {
 	log.Println("Log file", config.LOG_FILE, "initializing...")
 
-	log_file, err := os.Create(config.LOG_FILE)
+	log_file, err := os.OpenFile(config.LOG_FILE, os.O_APPEND, 0666)
 
 	if err != nil {
-		log.Fatal(err)
+		log_file, err = os.Create(config.LOG_FILE)
+
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	if config.ENV == config.ENV_PROD {
@@ -66,7 +70,7 @@ func initServer() {
 		judge.RestoreManagerState()
 	}
 
-	address := fmt.Sprintf("%s:%d", fHost, fPort)
+	address := fmt.Sprintf("%s:%d", config.HOST, config.PORT)
 	log.Printf("Started Showdown %s-%d on %s", config.INSTANCE_TYPE, config.INSTANCE_ID, address)
 	go func() {
 		if config.INSTANCE_TYPE == config.T_WORKER {
