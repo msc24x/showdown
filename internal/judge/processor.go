@@ -87,7 +87,7 @@ func judgeLines(test [][]rune, truth [][]rune) bool {
 	return true
 }
 
-// Executes and judge (optional) the execution request synchronously
+// Executes and judge (optional) the execution request synchronously.
 func processRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Params, response *ExecutionResponse) error {
 	engine := engine.BaseEngine{}
 

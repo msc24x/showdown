@@ -43,7 +43,7 @@ RUN npm install -g typescript && \
 # ISOLATE
 RUN apt-get -y install git libcap-dev libsystemd-dev pkg-config
 
-RUN git clone https://github.com/ioi/isolate && \
+RUN git clone --depth 1 --branch v1.10.1 https://github.com/ioi/isolate && \
     cd isolate && \
     sudo make isolate && \
     sudo make install

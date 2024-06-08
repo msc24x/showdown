@@ -1,3 +1,4 @@
+// provides support for listening to requests.
 package api
 
 import (
@@ -18,7 +19,7 @@ func WriteBadRequest(c *gin.Context, msg string) {
 	c.Writer.Write([]byte(msg))
 }
 
-// Initializes the API routes
+// Initializes the API routes.
 func AttachHandlers(router *gin.Engine) {
 	log.Println("Attaching API handlers...")
 	urls.AttachRouter(router)

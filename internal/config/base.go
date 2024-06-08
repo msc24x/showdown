@@ -1,11 +1,16 @@
 package config
 
 const (
-	DUMP_FILE            = "/var/lib/showdown/dump"
-	ENGINE_WORKDIR       = "/var/lib/showdown/files"
-	LOG_FILE             = "/var/lib/showdown/log.log"
+	DUMP_FILE      = "/var/lib/showdown/dump"
+	ENGINE_WORKDIR = "/var/lib/showdown/files"
+	LOG_FILE       = "/var/lib/showdown/log.log"
+
+	// How many processes should as worker process at a given time at max.
 	MAX_ACTIVE_PROCESSES = 5
-	MAX_WORKER_RETRIES   = 6
+
+	// After how many tries to reach a stalled worker should it be marked as
+	// dropped.
+	MAX_WORKER_RETRIES = 6
 
 	ISOLATE_BIN     = "tools/isolate/bin/isolate"
 	ISOLATE_WORKDIR = "/var/local/lib/isolate"
@@ -26,14 +31,20 @@ const (
 )
 
 var (
-	ACCESS_TOKEN                  = ""
-	WEBHOOK_SECRET                = ""
-	INSTANCE_ID              uint = 1
+	// If set, requests to this instances would require the client to send it.
+	ACCESS_TOKEN = ""
+	// If set, client can verify if a webhook has actually been called by Showdown.
+	WEBHOOK_SECRET = ""
+	// It is set automatically, however prone to changes if a worker re-authenticates.
+	INSTANCE_ID uint = 1
+	// It is set for workers, as its mandatory for them to connect to a manager.
 	MANAGER_INSTANCE_ID      uint = 0
 	MANAGER_INSTANCE_ADDRESS      = ""
 	INSTANCE_TYPE                 = T_STANDALONE
 
-	ACTIVE_POLLING_RATE  = 10      // Seconds
+	// After how many seconds should a manager ping workers to synchronize.
+	ACTIVE_POLLING_RATE = 10 // Seconds
+	// After how many seconds should a manager retry to ping dropped workers.
 	REVIVAL_POLLING_RATE = 30 * 60 // Seconds
 
 	PROTOCOL    = "http"

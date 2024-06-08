@@ -15,6 +15,8 @@ import (
 	"github.com/msc24x/showdown/internal/utils"
 )
 
+// Pings the instance address to ensure it is working, and a showdown instance of
+// type `expect_type`.
 func AuthenticateInstance(instance_url string, expect_type string) (*InstanceState, error) {
 	ping_url := fmt.Sprintf("%s%s", instance_url, urls.Url("status"))
 	client := &http.Client{}
@@ -55,6 +57,7 @@ func AuthenticateInstance(instance_url string, expect_type string) (*InstanceSta
 	return &state, err
 }
 
+// A worker instance method to connect itself to the provided manager address.
 func ConnectManager(url string) {
 	failIf := func(err error, context string) {
 		if err != nil {

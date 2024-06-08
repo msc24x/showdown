@@ -22,11 +22,12 @@ type WorkerRegistrationResponse struct {
 	AssignedInstanceId uint
 }
 
+// Log method for a worker process.
 func logProcess(pid string, fmsg string, a ...any) {
 	utils.LogWorker("Process ID %s: %s", pid, fmt.Sprintf(fmsg, a...))
 }
 
-// Initiate the consumer to start executing processes
+// Initiate the consumer to start executing processes.
 func InitQueueWorker() {
 	exe_proc_msgs := mq.Consume("executables")
 
@@ -63,7 +64,7 @@ func InitQueueWorker() {
 	utils.LogWorker("Worker initiated. Waiting for messages...")
 }
 
-// Executes one process
+// Executes one process .
 func processWorker(exe_proc *ExecutionProcess, offboard_c func(pid uuid.UUID)) {
 	logProcess(exe_proc.PID, "started")
 	start_time := time.Now().Unix()

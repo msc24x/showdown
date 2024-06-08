@@ -1,11 +1,15 @@
 package engine
 
-// Set of limits that can be applied on the BaseEngine before Execute
+// Set of limits that can be applied on the BaseEngine before Execute.
 type Limits struct {
-	Time     float32 // CPU time allowed in seconds
-	WallTime float32 // Total program execution time in seconds
-	Memory   int     // Max memory limit in KBs
-	Stack    int     // Max stack limit in KBs, although part of the Memory
+	// CPU time allowed in seconds.
+	Time float32
+	// Total program execution time in seconds.
+	WallTime float32
+	// Max memory limit in KBs.
+	Memory int
+	// Max stack limit in KBs, although part of the Memory.
+	Stack int
 }
 
 var (

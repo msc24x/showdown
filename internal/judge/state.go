@@ -13,24 +13,30 @@ import (
 	"github.com/google/uuid"
 )
 
+// A general state struct for any showdown instance.
 type InstanceState struct {
 	InstanceId   uint
-	ManagerId    uint
 	InstanceType string
-	Private      bool
+	// Provides manager id if instance type is worker.
+	ManagerId uint
+	// Specifies if instance uses Access-Token.
+	Private bool
 
+	// Not nil, if instance type is standalone/worker.
 	WorkerState *WorkerState
-	Workers     []*ShowdownWorker
+	// Specifies connected workers if instance type is manager.
+	Workers []*ShowdownWorker
 }
 
-// An in memory runtime information and statistics of the Showdown
+// An in memory runtime information and statistics of the Showdown.
 type WorkerState struct {
 	StartedSince time.Time
-
-	TotalProcessed  uint // Total number of requests processed since start
-	ActiveProcesses uint // Number of active requests being processed
-
-	Processes map[string]bool // Map of processes currently being processed
+	// Total number of requests processed since start.
+	TotalProcessed uint
+	// Number of active requests being processed.
+	ActiveProcesses uint
+	// Map of processes currently being processed.
+	Processes map[string]bool
 }
 
 var (
@@ -43,6 +49,7 @@ var (
 	worker_state_mutex sync.Mutex
 )
 
+// Reads the instance dump file and restores the workers data.
 func RestoreManagerState() {
 	worker_state_mutex.Lock()
 	defer worker_state_mutex.Unlock()
@@ -93,7 +100,7 @@ func GetInstanceState() *InstanceState {
 	return &res
 }
 
-// Record/verify an execution request
+// Record/verify an execution request.
 func OnboardProcess(pid uuid.UUID) uint {
 	worker_state_mutex.Lock()
 	defer worker_state_mutex.Unlock()
@@ -104,7 +111,7 @@ func OnboardProcess(pid uuid.UUID) uint {
 	return config.MAX_ACTIVE_PROCESSES - worker_state.ActiveProcesses
 }
 
-// Record the completion of an execution request
+// Record the completion of an execution request.
 func OffboardProcess(pid uuid.UUID) {
 	worker_state_mutex.Lock()
 	defer worker_state_mutex.Unlock()

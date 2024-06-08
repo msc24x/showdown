@@ -14,25 +14,34 @@ import (
 type WorkerStatus int8
 
 const (
-	SW_ACTIVE  WorkerStatus = 1 << 0
+	// Worker is active, valid and open to requests.
+	SW_ACTIVE WorkerStatus = 1 << 0
+	// Worker was active but is no longer responding after multiple retries.
+	// Manager stops pinging such instances.
 	SW_DROPPED WorkerStatus = 1 << 1
+	// Worker was active but has stopped responding to unknown reasons.
 	SW_STALLED WorkerStatus = 1 << 2
 )
 
 type ShowdownWorker struct {
-	InstanceId       uint
-	Address          string
-	Status           WorkerStatus
+	InstanceId uint
+	Address    string
+	Status     WorkerStatus
+	// Number of retries a worker has pending before a manager marks it as dropped.
 	Retries          uint8
 	LastFetchedState *InstanceState
 
-	CreatedSince  time.Time
+	CreatedSince time.Time
+	// Time since a worker has stalled.
 	InactiveSince time.Time
 }
 
 var workers = []*ShowdownWorker{}
+
+// A lock which must be acquired before workers data is updated.
 var Workers_mutex sync.Mutex
 
+// Starts a ticker to periodically ping available workers.
 func InitWorkersTicker() {
 	init := func(ticker *time.Ticker, status WorkerStatus) {
 		go func() {
@@ -53,6 +62,7 @@ func InitWorkersTicker() {
 	)
 }
 
+// Ping available workers.
 func PingWorkers(status WorkerStatus) {
 	Workers_mutex.Lock()
 	defer Workers_mutex.Unlock()
@@ -139,6 +149,7 @@ func AddWorker(instance *ShowdownWorker) {
 	log.Printf("worker-%d (%s) authenticated", instance.InstanceId, instance.Address)
 }
 
+// Get a next assignable ID for a new worker.
 func GetMaxWorkerId() uint {
 	var max_id uint = config.INSTANCE_ID
 

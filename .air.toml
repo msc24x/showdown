@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  bin = "build/showdown -start -p 7070 -config env/.config"
+  bin = "build/showdown -start -p 7070 -config env/wsl/.config"
   cmd = "/usr/local/go/bin/go build -buildvcs=false -o ./build/showdown ./cmd/showdown"
   delay = 500
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "files"]

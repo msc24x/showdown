@@ -1,5 +1,5 @@
 // Package engine provides the methods to execute an execution request in an
-// isolated and limited environment
+// isolated and limited environment.
 package engine
 
 import (
@@ -16,11 +16,16 @@ import (
 	"github.com/google/uuid"
 )
 
+// Constructs of fields required for a execution request to be valid.
 type ExecutionRequest struct {
-	Code     string `json:"code"`
+	// Code submitted by the user.
+	Code string `json:"code"`
+	// Programming language of the code.
 	Language string `json:"language"`
-	Input    string `json:"input"`
-	Output   string `json:"output"`
+	// What should be streamed into the program.
+	Input string `json:"input"`
+	// What is the expected output for the program.
+	Output string `json:"output"`
 }
 
 func (exeReq *ExecutionRequest) Validate() error {
@@ -45,24 +50,29 @@ func (exeReq *ExecutionRequest) Validate() error {
 
 }
 
-// BaseEngine is responsible for for isolated execution of the ExecutionRequest
+// BaseEngine is responsible for for isolated execution of the ExecutionRequest.
 type BaseEngine struct {
 	Request *ExecutionRequest
 
-	PID          uuid.UUID
+	// Is automatically assigned by the showdown when onboarding the execution request.
+	PID uuid.UUID
+	// Specifies which isolate box id/directory has been assigned for the request to reside in.
 	isolateBoxID int
-	languageInfo *Language // Language information fetched from ExecutionRequest
-	limits       *Limits   // Memory and compute limits during execution
-	command      string
-	commandArgs  []string
-	envs         []string
+	// Language information fetched from ExecutionRequest.
+	languageInfo *Language
+	// Memory and compute limits during execution.
+	limits      *Limits
+	command     string
+	commandArgs []string
+	envs        []string
 
-	workDirectory  string // Not all instances have same working directory, which is determined by the isolateBoxId
+	// Not all instances have same working directory, which is determined by the isolateBoxId.
+	workDirectory  string
 	sourceFilePath string
 	inputFilePath  string
 }
 
-// Implements the public methods
+// Implements the public methods.
 type BaseEnginePI interface {
 	Init(exe_req *ExecutionRequest) error
 	Execute() ([]byte, error)
@@ -70,21 +80,21 @@ type BaseEnginePI interface {
 	Clean()
 }
 
-// Implements the Initialization helpers
+// Implements the Initialization helpers.
 type BaseEngineInit interface {
 	prepareFiles() error
 	prepareCommand() error
 }
 
-// Implements the methods to work with Isolate binary
+// Implements the methods to work with Isolate binary.
 type BaseEngineIsolate interface {
 	prepareIsolatedBox(retry bool) error
 	cleanIsolatedBox() error
 	getIsolatedCommand() (*exec.Cmd, error)
 }
 
+// Parses the execution request and creates required files in the isolate box.
 func (engine *BaseEngine) prepareFiles() error {
-
 	file_name := fmt.Sprintf("%s.%s", engine.PID.String(), engine.Request.Language)
 	engine.sourceFilePath = file_name
 	engine.inputFilePath = engine.PID.String() + ".txt"
@@ -136,7 +146,7 @@ func (engine *BaseEngine) prepareCommand() error {
 	return nil
 }
 
-// Cleans up the isolate box directories
+// Cleans up the isolate box directories.
 func (engine *BaseEngine) cleanIsolatedBox() error {
 	boxCleanupCmd := exec.Command(
 		"sudo", config.ISOLATE_BIN, "--cg",
@@ -151,6 +161,7 @@ func (engine *BaseEngine) cleanIsolatedBox() error {
 	return utils.NewError(err, "Cleaning isolate box")
 }
 
+// Creates or recreates, if already exists, isolate box.
 func (engine *BaseEngine) prepareIsolatedBox(retry bool) error {
 	boxInitCmd := exec.Command(
 		"sudo", config.ISOLATE_BIN, "--cg",

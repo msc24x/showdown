@@ -1,4 +1,4 @@
-// Package judge utilizes the package engine and judges the execution output
+// Package judge utilizes the package engine and judges the execution output.
 package judge
 
 import (
@@ -13,14 +13,14 @@ import (
 )
 
 // Internal struct to conveniently pass execution response, params and pid
-// from one process to another. Mainly for rabbit mq
+// from one process to another. Mainly for rabbit mq.
 type ExecutionProcess struct {
 	PID     string                  `json:"pid"`
 	Request engine.ExecutionRequest `json:"request"`
 	Params  Params                  `json:"params"`
 }
 
-// Struct to define the end results the users will receive
+// Struct to define the end results the users will receive.
 type ExecutionResponse struct {
 	PID         string `json:"pid"`
 	Webhook     string `json:"webhook"`
@@ -34,11 +34,11 @@ type ExecutionResponse struct {
 }
 
 type Params struct {
-	// set the webhook, and showdown will send the response to that webhook
-	// instead of an immediate response
+	// Set the webhook, and showdown will send the response to that webhook
+	// instead of an immediate response.
 	Webhook string `json:"webhook"`
 
-	// set this to true and Showdown will only execute the code, not judge
+	// Set this to true and Showdown will only execute the code, not judge.
 	DoNotJudge bool `json:"donotjudge"`
 }
 
@@ -50,7 +50,7 @@ func (params *Params) Validate() error {
 	return nil
 }
 
-// Entrypoint for an HTTP execution request
+// Entrypoint for an HTTP execution request.
 func JudgeExecutionRequest(exe_req *engine.ExecutionRequest, params *Params) (*ExecutionResponse, error) {
 	pid := uuid.New()
 	response := ExecutionResponse{}
@@ -71,7 +71,7 @@ func JudgeExecutionRequest(exe_req *engine.ExecutionRequest, params *Params) (*E
 	return &response, nil
 }
 
-// Takes the execution request and queues it into rabbit mq queue
+// Takes the execution request and queues it into rabbit mq queue.
 func queueRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Params) {
 	process_obj := ExecutionProcess{
 		PID:     pid.String(),

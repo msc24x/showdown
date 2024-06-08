@@ -1,3 +1,4 @@
+// Communication middleware between the application and the message broker.
 package mq
 
 import (
@@ -16,7 +17,7 @@ var connection *amqp.Connection
 var channel *amqp.Channel
 var queues = make(map[string]*amqp.Queue)
 
-// Declare and create multiple rabbit mq queues if required
+// Declare and create multiple rabbit mq queues if required.
 func declareQueues(names ...string) {
 	for _, name := range names {
 		q_exe, err := channel.QueueDeclare(
@@ -34,7 +35,7 @@ func declareQueues(names ...string) {
 	}
 }
 
-// Prepares Showdown for queue operations and consumption
+// Prepares Showdown for queue operations and consumption.
 func InitMessageQueue() func() {
 	rmq_url := fmt.Sprintf(
 		"amqp://%s:%s@%s:%s/",
@@ -57,7 +58,7 @@ func InitMessageQueue() func() {
 	}
 }
 
-// Queues given message into given queue
+// Queues given message into given queue.
 func Queue(q_name string, retries int, body []byte) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -89,7 +90,7 @@ func Queue(q_name string, retries int, body []byte) {
 }
 
 // Returns consumable stream of array like object of rabbit mq messages
-// for given queue
+// for given queue.
 func Consume(q_name string) <-chan amqp.Delivery {
 	deliveries, err := channel.Consume(
 		q_name,

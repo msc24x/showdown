@@ -10,10 +10,14 @@ import (
 )
 
 type Language struct {
-	Supported bool // To temporarily disable a language's support
-	Format    string
+	// To temporarily disable a language's support.
+	Supported bool
+	// File extension of the programming language.
+	Format string
 
-	BuildRequired bool // Tells the BaseEngine whether to use RunnerPath or CompilerPath
+	// Specifies if the language is compiled or not, whether to use a compiler
+	// path of the runner path.
+	BuildRequired bool
 	RunnerPath    string
 	CompilerPath  string
 
@@ -22,8 +26,10 @@ type Language struct {
 }
 
 const (
+	// Placeholder identifier for the code file in the compilation command.
 	CMD_FILE = "__SHDN_FILE"
-	CMD_OUT  = "__SHDN_OUT"
+	// Placeholder identifier for the output file in the compilation command.
+	CMD_OUT = "__SHDN_OUT"
 )
 
 var (
@@ -84,7 +90,7 @@ var SUPPORTED_LANGUAGES = []*Language{
 	&GOLANG,
 }
 
-// Import paths from file config.CONFIG_FILE
+// Import paths from file config.CONFIG_FILE.
 func ImportPaths() {
 	var (
 		path string

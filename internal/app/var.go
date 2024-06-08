@@ -1,3 +1,4 @@
+// Maintains application state.
 package app
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/msc24x/showdown/internal/utils"
 )
 
+// Backups the instance state in a dump file in /var/lib/showdown.
 func DumpInstanceState(c []byte) {
 	os.Mkdir("/var/lib/showdown/", 0644)
 
@@ -18,6 +20,7 @@ func DumpInstanceState(c []byte) {
 	f.Close()
 }
 
+// Restores the instance state from the dump file.
 func ReadInstanceState() ([]byte, error) {
 	os.Mkdir("/var/lib/showdown/", 0644)
 

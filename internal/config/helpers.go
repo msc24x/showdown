@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// After config file path has been set, call this to import the config from file.
 func ImportConfig() bool {
 	paths, err := godotenv.Read(CONFIG_FILE)
 
