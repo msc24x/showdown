@@ -1,7 +1,7 @@
 package api
 
 import (
-	"msc24x/showdown/config"
+	"github.com/msc24x/showdown/internal/config"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,9 +1,10 @@
 package app
 
 import (
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/utils"
 	"os"
+
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/utils"
 )
 
 func DumpInstanceState(c []byte) {

@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/utils"
 	"time"
+
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/utils"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )

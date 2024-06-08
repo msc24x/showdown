@@ -1,0 +1,34 @@
+site_name: Showdown
+theme: 
+  name: material
+  repo_url: https://github.com/msc24x/showdown
+  shortcuts:
+    help: 191    # ?
+    search: 83   # s
+  user_color_mode_toggle: true
+  features:
+    - content.code.copy
+    - content.tooltips
+  markdown_extensions:
+  - tables
+  palette:
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference

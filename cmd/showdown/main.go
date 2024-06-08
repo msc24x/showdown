@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"msc24x/showdown/api"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/judge"
-	"msc24x/showdown/internal/mq"
-	"msc24x/showdown/internal/utils"
 	"os"
+
+	"github.com/msc24x/showdown/internal/api"
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/judge"
+	"github.com/msc24x/showdown/internal/mq"
+	"github.com/msc24x/showdown/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )

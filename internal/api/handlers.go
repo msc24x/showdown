@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/engine"
-	"msc24x/showdown/internal/judge"
+
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/engine"
+	"github.com/msc24x/showdown/internal/judge"
 
 	"github.com/gin-gonic/gin"
 )

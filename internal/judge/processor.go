@@ -1,7 +1,7 @@
 package judge
 
 import (
-	"msc24x/showdown/internal/engine"
+	"github.com/msc24x/showdown/internal/engine"
 
 	"github.com/google/uuid"
 )

@@ -2,7 +2,8 @@ package api
 
 import (
 	"log"
-	"msc24x/showdown/urls"
+
+	"github.com/msc24x/showdown/internal/api/urls"
 
 	"github.com/gin-gonic/gin"
 )

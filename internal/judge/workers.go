@@ -3,11 +3,12 @@ package judge
 import (
 	"encoding/json"
 	"log"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/app"
-	"msc24x/showdown/internal/utils"
 	"sync"
 	"time"
+
+	"github.com/msc24x/showdown/internal/app"
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/utils"
 )
 
 type WorkerStatus int8
@@ -84,7 +85,7 @@ func PingWorkers(status WorkerStatus) {
 			workers[index] = workers[len(workers)-1]
 			workers[len(workers)-1] = nil
 			workers = workers[:len(workers)-1]
-			utils.LogWarn("worker-%d dropped permanently, due to invalid entry", worker.InstanceId)
+			utils.LogWarn("worker-%d deleted permanently, due to invalid entry", worker.InstanceId)
 			continue
 		}
 

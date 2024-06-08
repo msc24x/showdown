@@ -1,6 +1,6 @@
 #!/bin/sh
 
-( rabbitmqctl wait --timeout 60 $RABBITMQ_PID_FILE ; \
+( rabbitmqctl wait --timeout 2 $RABBITMQ_PID_FILE ; \
 rabbitmqctl add_user $RABBIT_MQ_USER $RABBIT_MQ_PASSWORD 2>/dev/null ; \
 rabbitmqctl set_user_tags $RABBIT_MQ_USER administrator ; \
 rabbitmqctl set_permissions -p / $RABBIT_MQ_USER  ".*" ".*" ".*" ; \

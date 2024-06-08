@@ -3,11 +3,12 @@ package judge
 import (
 	"encoding/json"
 	"log"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/app"
-	"msc24x/showdown/internal/utils"
 	"sync"
 	"time"
+
+	"github.com/msc24x/showdown/internal/app"
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/utils"
 
 	"github.com/google/uuid"
 )

@@ -1,4 +1,4 @@
-module msc24x/showdown
+module github.com/msc24x/showdown
 
 go 1.20
 

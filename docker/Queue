@@ -14,4 +14,4 @@ RUN chmod +x init_queue.sh
 EXPOSE 15672
 EXPOSE 5672
 
-CMD ["./init_queue.sh"]
+CMD ["./scripts/init_queue.sh"]

@@ -4,9 +4,10 @@ package judge
 import (
 	"encoding/json"
 	"errors"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/engine"
-	"msc24x/showdown/internal/mq"
+
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/engine"
+	"github.com/msc24x/showdown/internal/mq"
 
 	"github.com/google/uuid"
 )

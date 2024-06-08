@@ -2,8 +2,9 @@ package engine
 
 import (
 	"log"
-	"msc24x/showdown/config"
 	"strings"
+
+	"github.com/msc24x/showdown/internal/config"
 
 	"github.com/joho/godotenv"
 )
@@ -51,14 +52,14 @@ var (
 	}
 	JAVASCRIPT = Language{
 		Format:        config.JAVASCRIPT,
-		BuildRequired: true,
+		BuildRequired: false,
 		RunnerPath:    "node",
 		CompilerPath:  "",
 		Supported:     true,
 	}
 	TYPESCRIPT = Language{
 		Format:        config.TYPESCRIPT,
-		BuildRequired: true,
+		BuildRequired: false,
 		RunnerPath:    "ts-node",
 		CompilerPath:  "",
 		Supported:     true,

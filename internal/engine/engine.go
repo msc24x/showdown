@@ -6,11 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/utils"
 	"os"
 	"os/exec"
 	"reflect"
+
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/utils"
 
 	"github.com/google/uuid"
 )
@@ -142,7 +143,10 @@ func (engine *BaseEngine) cleanIsolatedBox() error {
 		"-b", fmt.Sprintf("%d", engine.isolateBoxID),
 		"--cleanup",
 	)
-	_, err := boxCleanupCmd.CombinedOutput()
+
+	fmt.Println(boxCleanupCmd)
+	o, err := boxCleanupCmd.CombinedOutput()
+	fmt.Println(string(o), err)
 
 	return utils.NewError(err, "Cleaning isolate box")
 }

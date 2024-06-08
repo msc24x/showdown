@@ -14,8 +14,6 @@ services:
     volumes:
       - ./env/worker:/showdown/env
       - ./tmp/worker:/var/lib/showdown
-    profiles:
-      - worker
 
   showdown-manager:
     container_name: showdown-manager
@@ -29,8 +27,19 @@ services:
     volumes:
       - ./env/manager:/showdown/env
       - ./tmp/manager:/var/lib/showdown
-    profiles:
-      - manager
+  
+  showdown-dev:
+    container_name: showdown-dev
+    build:
+      context: .
+      dockerfile: docker/Dev
+    ports:
+      - "7070:7070"
+    volumes:
+      - .:/showdown
+      - ./tmp/standalone:/var/lib/showdown
+    privileged: true
+    restart: always
 
   showdown-standalone:
     container_name: showdown-standalone
@@ -44,8 +53,6 @@ services:
       - ./tmp/standalone:/var/lib/showdown
     privileged: true
     restart: always
-    profiles:
-      - standalone
 
   showdown-mq:
     container_name: showdown-mq
@@ -61,5 +68,3 @@ services:
       - RABBIT_MQ_USER=$RABBIT_MQ_USER
       - RABBIT_MQ_PASSWORD=$RABBIT_MQ_PASSWORD
     restart: always
-    profiles:
-      - services

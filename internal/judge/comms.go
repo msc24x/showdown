@@ -7,11 +7,12 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/utils"
-	"msc24x/showdown/urls"
 	"net/http"
 	"os"
+
+	"github.com/msc24x/showdown/internal/api/urls"
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/utils"
 )
 
 func AuthenticateInstance(instance_url string, expect_type string) (*InstanceState, error) {

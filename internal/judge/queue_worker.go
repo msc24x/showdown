@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"msc24x/showdown/config"
-	"msc24x/showdown/internal/mq"
-	"msc24x/showdown/internal/utils"
 	"net/http"
 	"time"
+
+	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/mq"
+	"github.com/msc24x/showdown/internal/utils"
 
 	"github.com/google/uuid"
 )

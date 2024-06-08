@@ -1,7 +1,7 @@
 package urls
 
 import (
-	"msc24x/showdown/internal/utils"
+	"github.com/msc24x/showdown/internal/utils"
 
 	"github.com/gin-gonic/gin"
 )
