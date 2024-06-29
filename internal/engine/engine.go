@@ -154,9 +154,7 @@ func (engine *BaseEngine) cleanIsolatedBox() error {
 		"--cleanup",
 	)
 
-	fmt.Println(boxCleanupCmd)
-	o, err := boxCleanupCmd.CombinedOutput()
-	fmt.Println(string(o), err)
+	_, err := boxCleanupCmd.CombinedOutput()
 
 	return utils.NewError(err, "Cleaning isolate box")
 }

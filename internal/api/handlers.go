@@ -51,8 +51,13 @@ func Judge(c *gin.Context) {
 	output, err := judge.JudgeExecutionRequest(&req.Exe, &req.JudgeParams)
 
 	if err != nil {
-		WriteServerError(c, err.Error())
-		return
+		if output != nil {
+			WriteServerError(c, err.Error())
+			return
+		} else {
+			WriteError(c, HTTP_TOO_MANY_REQ, err.Error())
+			return
+		}
 	}
 
 	c.IndentedJSON(200, output)

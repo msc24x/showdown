@@ -49,6 +49,8 @@ services:
     volumes:
       - ./env/worker:/showdown/env
       - ./tmp/worker:/var/lib/showdown
+    networks:
+      - showdown
 
   showdown-manager:
     image: msc24x/showdown:latest-manager
@@ -63,6 +65,8 @@ services:
     volumes:
       - ./env/manager:/showdown/env
       - ./tmp/manager:/var/lib/showdown
+    networks:
+      - showdown
   
   showdown-dev:
     container_name: showdown-dev
@@ -76,3 +80,5 @@ services:
       - ./tmp/standalone:/var/lib/showdown
     privileged: true
     restart: always
+    networks:
+      - showdown

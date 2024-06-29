@@ -2,6 +2,7 @@ package judge
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"sync"
 	"time"
@@ -31,6 +32,8 @@ type InstanceState struct {
 // An in memory runtime information and statistics of the Showdown.
 type WorkerState struct {
 	StartedSince time.Time
+	// Total number of requests denied since start.
+	DeniedProcessed uint
 	// Total number of requests processed since start.
 	TotalProcessed uint
 	// Number of active requests being processed.
@@ -101,14 +104,19 @@ func GetInstanceState() *InstanceState {
 }
 
 // Record/verify an execution request.
-func OnboardProcess(pid uuid.UUID) uint {
+func OnboardProcess(pid uuid.UUID) (uint, error) {
 	worker_state_mutex.Lock()
 	defer worker_state_mutex.Unlock()
+
+	if worker_state.ActiveProcesses == config.MAX_ACTIVE_PROCESSES {
+		worker_state.DeniedProcessed++
+		return 0, errors.New("max active processes limit reached")
+	}
 
 	worker_state.ActiveProcesses++
 	worker_state.Processes[pid.String()] = true
 
-	return config.MAX_ACTIVE_PROCESSES - worker_state.ActiveProcesses
+	return config.MAX_ACTIVE_PROCESSES - worker_state.ActiveProcesses, nil
 }
 
 // Record the completion of an execution request.

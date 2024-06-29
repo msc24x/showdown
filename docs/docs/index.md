@@ -1,7 +1,7 @@
 # Overview
 
 ## What is Showdown?
-Showdown is a portable application, written in [GoLang](https://go.dev/), to execute and judge code for multiple languages.
+[Showdown](https://github.com/msc24x/showdown) is a portable application, written in [GoLang](https://go.dev/), to execute and judge code for multiple languages.
 It comes with an already built docker image with compilers and runners for selected
 programming languages and configuration to use required binaries to execute the code
 based on the language provided.

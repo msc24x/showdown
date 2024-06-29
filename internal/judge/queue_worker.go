@@ -51,9 +51,12 @@ func InitQueueWorker() {
 			}
 
 			logProcess(exec_obj.PID, "received")
-			capacity := OnboardProcess(pid)
+			left_capacity, err := OnboardProcess(pid)
 
-			if capacity > 0 {
+			// Queue worker ensures the limit don't reach, still if it does; panic.
+			utils.PanicIf(err)
+
+			if left_capacity > 0 {
 				go processWorker(&exec_obj, OffboardProcess)
 			} else {
 				processWorker(&exec_obj, OffboardProcess)

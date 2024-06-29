@@ -9,6 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	HTTP_SERVER_ERR   = 500
+	HTTP_BAD_REQ      = 400
+	HTTP_TOO_MANY_REQ = 429
+)
+
+func WriteError(c *gin.Context, code int, msg string) {
+	c.Writer.WriteHeader(code)
+	c.Writer.Write([]byte(msg))
+}
+
 func WriteServerError(c *gin.Context, msg string) {
 	c.Writer.WriteHeader(500)
 	c.Writer.Write([]byte(msg))

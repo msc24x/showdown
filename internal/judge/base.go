@@ -62,7 +62,15 @@ func JudgeExecutionRequest(exe_req *engine.ExecutionRequest, params *Params) (*E
 		return &response, nil
 	}
 
-	err := processRequest(pid, exe_req, params, &response)
+	_, err := OnboardProcess(pid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer OffboardProcess(pid)
+
+	err = processRequest(pid, exe_req, params, &response)
 
 	if err != nil {
 		return &response, err
