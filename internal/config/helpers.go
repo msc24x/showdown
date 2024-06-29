@@ -22,6 +22,18 @@ func ImportConfig() bool {
 		ibuff    int
 	)
 
+	conf_key = "MAX_WORKER_RETRIES"
+	ibuff, err = strconv.Atoi(paths[conf_key])
+	if err == nil {
+		MAX_WORKER_RETRIES = uint8(ibuff)
+	}
+
+	conf_key = "MAX_ACTIVE_PROCESSES"
+	ibuff, err = strconv.Atoi(paths[conf_key])
+	if err == nil {
+		MAX_ACTIVE_PROCESSES = uint(ibuff)
+	}
+
 	conf_key = "ACTIVE_POLLING_RATE"
 	ibuff, err = strconv.Atoi(paths[conf_key])
 	if err == nil {
@@ -44,6 +56,12 @@ func ImportConfig() bool {
 	sbuff = paths[conf_key]
 	if sbuff != "" {
 		HOST = sbuff
+	}
+
+	conf_key = "PROTOCOL"
+	sbuff = paths[conf_key]
+	if sbuff != "" {
+		PROTOCOL = sbuff
 	}
 
 	conf_key = "CREDS_FILE"

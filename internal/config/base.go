@@ -5,13 +5,6 @@ const (
 	ENGINE_WORKDIR = "/var/lib/showdown/files"
 	LOG_FILE       = "/var/lib/showdown/log.log"
 
-	// How many processes should as worker process at a given time at max.
-	MAX_ACTIVE_PROCESSES = 5
-
-	// After how many tries to reach a stalled worker should it be marked as
-	// dropped.
-	MAX_WORKER_RETRIES = 6
-
 	ISOLATE_BIN     = "tools/isolate/bin/isolate"
 	ISOLATE_WORKDIR = "/var/local/lib/isolate"
 
@@ -46,6 +39,11 @@ var (
 	ACTIVE_POLLING_RATE = 10 // Seconds
 	// After how many seconds should a manager retry to ping dropped workers.
 	REVIVAL_POLLING_RATE = 30 * 60 // Seconds
+	// How many processes should as worker process at a given time at max.
+	MAX_ACTIVE_PROCESSES uint = 5
+	// After how many tries to reach a stalled worker should it be marked as
+	// dropped.
+	MAX_WORKER_RETRIES uint8 = 6
 
 	PROTOCOL    = "http"
 	HOST        = "0.0.0.0"
