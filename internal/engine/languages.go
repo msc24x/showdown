@@ -36,7 +36,7 @@ var (
 	PYTHON = Language{
 		Format:        config.PYTHON,
 		BuildRequired: false,
-		RunnerPath:    "python",
+		RunnerPath:    "/opt/python/3.12.0/bin/python3",
 		CompilerPath:  "",
 		Supported:     true,
 	}
@@ -44,7 +44,7 @@ var (
 		Format:        config.CPP,
 		BuildRequired: true,
 		RunnerPath:    "",
-		CompilerPath:  "g++",
+		CompilerPath:  "/usr/bin/g++",
 		Supported:     true,
 		SubCommands:   []string{CMD_FILE, "-o", CMD_OUT},
 	}
@@ -52,21 +52,21 @@ var (
 		Format:        config.C,
 		BuildRequired: true,
 		RunnerPath:    "",
-		CompilerPath:  "gcc",
+		CompilerPath:  "/usr/bin/gcc",
 		Supported:     true,
 		SubCommands:   []string{CMD_FILE, "-o", CMD_OUT},
 	}
 	JAVASCRIPT = Language{
 		Format:        config.JAVASCRIPT,
 		BuildRequired: false,
-		RunnerPath:    "node",
+		RunnerPath:    "/usr/bin/node",
 		CompilerPath:  "",
 		Supported:     true,
 	}
 	TYPESCRIPT = Language{
 		Format:        config.TYPESCRIPT,
 		BuildRequired: false,
-		RunnerPath:    "ts-node",
+		RunnerPath:    "/usr/bin/ts-node",
 		CompilerPath:  "",
 		Supported:     true,
 		DefaultEnvs:   []string{"TS_NODE_FILES=true"},
@@ -75,7 +75,7 @@ var (
 		Format:        config.GOLANG,
 		BuildRequired: true,
 		RunnerPath:    "",
-		CompilerPath:  "go",
+		CompilerPath:  "/usr/local/go/bin/go",
 		Supported:     true,
 		SubCommands:   []string{"build"},
 	}

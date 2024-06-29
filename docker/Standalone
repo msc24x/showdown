@@ -2,19 +2,18 @@ FROM golang:1.20 AS build
 
 ENV APP_DIR /showdown
 
-COPY . $APP_DIR
 WORKDIR $APP_DIR
+COPY . .
 
 RUN go build -o ./server ./cmd/showdown
 
-FROM msc24x/compilers AS server
+FROM msc24x/showdown:latest-compilers AS server
 
 ENV APP_DIR /showdown
 WORKDIR $APP_DIR
 
 RUN adduser showdown \
     && echo "showdown ALL=(ALL) NOPASSWD: ${APP_DIR}/server" >> /etc/sudoers
-
 
 COPY --from=build $APP_DIR/server server
 

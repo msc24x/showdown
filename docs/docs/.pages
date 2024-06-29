@@ -1,0 +1,6 @@
+nav:
+    - index.md
+    - principles.md
+    - setup.md
+    - config-file.md
+    - creds-file.md

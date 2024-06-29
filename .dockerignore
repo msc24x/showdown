@@ -1,0 +1,7 @@
+docker/
+build/
+.vscode/
+docs/
+env/
+tmp/
+.git

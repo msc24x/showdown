@@ -1,4 +1,13 @@
 site_name: Showdown
+plugins:
+  - search
+  - awesome-pages
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
 theme: 
   name: material
   repo_url: https://github.com/msc24x/showdown
@@ -9,10 +18,7 @@ theme:
   features:
     - content.code.copy
     - content.tooltips
-  markdown_extensions:
-  - tables
   palette:
-
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       toggle:

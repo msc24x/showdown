@@ -8,10 +8,10 @@ ENV RABBIT_MQ_PASSWORD ${RABBIT_MQ_PASSWORD}
 
 ENV RABBITMQ_PID_FILE /var/lib/rabbitmq/mnesia/rabbitmq
 
-ADD scripts/init_queue.sh init_queue.sh
+COPY scripts/init_queue.sh init_queue.sh
 RUN chmod +x init_queue.sh
 
 EXPOSE 15672
 EXPOSE 5672
 
-CMD ["./scripts/init_queue.sh"]
+CMD ["./init_queue.sh"]

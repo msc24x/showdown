@@ -1,8 +1,44 @@
 version: '3.8'
 
 services:
+
+  showdown-standalone:
+    image: msc24x/showdown:latest-standalone
+    container_name: showdown-standalone
+    build:
+      context: .
+      dockerfile: docker/Standalone
+    ports:
+      - "7070:7070"
+    volumes:
+      - ./env/standalone:/showdown/env
+      - ./tmp/standalone:/var/lib/showdown
+    privileged: true
+    restart: always
+    networks:
+      - showdown
+
+  showdown-mq:
+    image: msc24x/showdown:latest-queue
+    container_name: showdown-mq
+    build:
+      context: .
+      dockerfile: docker/Queue
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=$RABBITMQ_DEFAULT_USER
+      - RABBITMQ_DEFAULT_PASS=$RABBITMQ_DEFAULT_USER
+      - RABBIT_MQ_USER=$RABBIT_MQ_USER
+      - RABBIT_MQ_PASSWORD=$RABBIT_MQ_PASSWORD
+    restart: always
+    networks:
+      - showdown
+
   showdown-worker:
     container_name: showdown-worker
+    image: msc24x/showdown:latest-worker
     build:
       context: .
       dockerfile: docker/Worker
@@ -15,6 +51,7 @@ services:
       - ./tmp/worker:/var/lib/showdown
 
   showdown-manager:
+    image: msc24x/showdown:latest-manager
     container_name: showdown-manager
     build:
       context: .
@@ -38,32 +75,4 @@ services:
       - .:/showdown
       - ./tmp/standalone:/var/lib/showdown
     privileged: true
-    restart: always
-
-  showdown-standalone:
-    container_name: showdown-standalone
-    build:
-      context: .
-      dockerfile: docker/Standalone
-    ports:
-      - "7070:7070"
-    volumes:
-      - ./env/standalone:/showdown/env
-      - ./tmp/standalone:/var/lib/showdown
-    privileged: true
-    restart: always
-
-  showdown-mq:
-    container_name: showdown-mq
-    build:
-      context: .
-      dockerfile: docker/Queue
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=$RABBITMQ_DEFAULT_USER
-      - RABBITMQ_DEFAULT_PASS=$RABBITMQ_DEFAULT_USER
-      - RABBIT_MQ_USER=$RABBIT_MQ_USER
-      - RABBIT_MQ_PASSWORD=$RABBIT_MQ_PASSWORD
     restart: always
