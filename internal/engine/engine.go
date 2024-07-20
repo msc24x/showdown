@@ -228,8 +228,8 @@ func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest) error {
 	engine.Request = exe_req
 	engine.PID = pid
 
-	box_id := rand.Intn(config.MAX_ACTIVE_PROCESSES)
-	engine.isolateBoxID = box_id % config.MAX_ACTIVE_PROCESSES
+	box_id := rand.Intn(int(config.MAX_ACTIVE_PROCESSES))
+	engine.isolateBoxID = box_id % int(config.MAX_ACTIVE_PROCESSES)
 	engine.workDirectory = fmt.Sprintf("%s/%d/box", config.ISOLATE_WORKDIR, engine.isolateBoxID)
 
 	if err := engine.prepareIsolatedBox(true); err != nil {

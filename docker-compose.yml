@@ -1,7 +1,9 @@
 version: '3.8'
 
-services:
+networks:
+  showdown:
 
+services:
   showdown-standalone:
     image: msc24x/showdown:latest-standalone
     container_name: showdown-standalone
