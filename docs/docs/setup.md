@@ -1,7 +1,7 @@
 # Setup
 ## Perquisites
 !!! warning
-	After making sure you have your machine setup according to their requirements,
+	After making sure you have your machine set up according to their requirements,
 	you might still face some issues. Go through this guide, when you
 	face the issues.
 
@@ -18,7 +18,7 @@ you might need to do on your servers to ensure it's properly working.
 #### Not using --privileged
 The ISOLATE uses root privileges of the host machine as explained [here.](https://www.ucw.cz/moe/isolate.1.html#:~:text=Isolate%20is%20designed%20to%20run%20setuid%20to%20root.%20The%20sub%2Dprocess%20inside%20the%20sandbox%20then%20switches%20to%20a%20non%2Dprivileged%20user%20ID%20(different%20for%20each%20%2D%2Dbox%2Did).%20The%20range%20of%20UIDs%20available%20and%20several%20filesystem%20paths%20are%20set%20in%20a%20configuration%20file%2C%20by%20default%20located%20in%20/usr/local/etc/isolate) 
 
-Due to which, the docker container for any Showdown instance must be started as `--privileged`
+Due to this, the docker container for any Showdown instance must be started as `--privileged`
 
 #### Error while "Initializing isolate box"
 This should be due to your control group's version. By default your machine might

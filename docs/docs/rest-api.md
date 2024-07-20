@@ -5,10 +5,10 @@ is done via REST APIs. Currently, its interface is the simple as possible with l
 endpoints.
 
 ## Authorization
-Showdown requests are authenticated with the HTTP header `Access-token``, which can be
+Showdown requests are authenticated with the HTTP header `Access-token`, which can be
 specified by you in the [.env.creds](/creds-file) secrets file. By default, this is empty,
 and hence unauthenticated requests will be able to communicate to your instance. Hence,
-we recommend to set `ACCESS_TOKEN` in your secrets.
+we recommend setting `ACCESS_TOKEN` in your secrets.
 
 ## Endpoints
 
@@ -97,7 +97,7 @@ const (
 ```
 
 ##### Status 401
-When the HTTP header `Access-Token`` is not identified by the application.
+When the HTTP header `Access-Token` is not identified by the application.
 
 ### **POST** `/judge`
 Key endpoint to request Showdown for an execution of a process
@@ -190,10 +190,11 @@ type ExecutionResponse struct {
 ```
 
 ##### Status 401
-When the HTTP header `Access-Token`` is not identified by the application.
+When the HTTP header `Access-Token` is not identified by the application.
 
 ##### Status 400
 Following are the possible self-explanatory error strings.
+
 - `Not allowed on worker instance`
 - `max active processes limit reached`
 

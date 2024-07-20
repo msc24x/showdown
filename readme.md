@@ -1,31 +1,29 @@
 ![](banner.png)
 # Showdown
-### Remote code execution & judge server
-
-[Showdown](https://github.com/msc24x/showdown) is a portable remote code execution and judge server, written in [GoLang](https://go.dev/), that support multiple popular programming languages.
-It comes with an already built docker image with compilers and runners for selected
-programming languages and configuration to use required binaries to execute the code
+[Showdown](https://github.com/msc24x/showdown) is a portable remote code execution and judge server, written in GoLang,
+that supports multiple popular programming languages.
+It comes with an already-built docker image with compilers and runners for selected
+programming languages and configurations to use the required binaries to execute the code
 based on the language provided.
 	
 It acts as a server that listens to requests for code
 execution and processes the requests either in asynchronous mode or immediate mode,
-depending upon the configuration. Its customizable in terms of execution and the configuration
-gives you enough control over your application specific setup. It uses [RabbitMQ](https://www.rabbitmq.com/) for
+depending upon the configuration. It's customizable in terms of execution and the configuration
+gives you enough control over your application-specific setup. It uses [RabbitMQ](https://www.rabbitmq.com/) for a 
 queue that allows the Showdown to consist of multiple instances on different servers
-and act together as a distributed network workers.
+and act together as a distributed network worker.
 
 ## How it works?
 There are 4 key parts of its design.
 
-1. Application ([Standalone](/glossary/#standalone)/[Manager](/glossary/#manager)/[Worker](/glossary/#worker))
+1. Application (Standalone/Manager/Worker)
 2. Isolate ([Sandbox for securely executing untrusted programs](https://github.com/ioi/isolate))
 3. Compilers (Docker image with collection of compilers/runners)
 4. Message queue (RabbitMQ)
 
 The application, which is Showdown, is a mediator between the client/user and the compilers. It
-is responsible for listening to user requests for any code execution. It parses the request, extracts
-the language, on the basis of which it selects the appropriate compiler or the runner for the language
-and at last executes it.
+is responsible for listening to user requests for any code execution. It parses the request and extracts the language,
+based on which it selects the appropriate compiler or the runner for the language and at last, executes it.
 
 For execution, it utilizes Isolate, which is a sandbox that allows Showdown to isolate the code
 submitted by the user and execute it safely. Using it we can set up CPU time or memory limits as well.
@@ -36,7 +34,7 @@ the docker images provided. The images are based upon our Compilers image which 
 of supported languages and Isolate installation which is required for Showdown to work.
 
 At last, the application can work in 3 modes. _Worker_, whose only job is to consume the available
-execution requests lying in message queue. _Manager_, which is only responsible for listening to user
-requests and just adding the request into the message queue. _Standalone_, which is quite self explanatory;
-starting a _standalone_ instance would be sufficient itself for small or most use cases, as you won't
+execution requests lying in the message queue. _Manager_, which is only responsible for listening to user
+requests and just adding the request into the message queue. _Standalone_, which is quite self-explanatory;
+starting a _standalone_ instance would be sufficient for small or most use cases, as you won't
 be required to run _manager_ or _worker_ instance separately.
