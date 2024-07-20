@@ -1,6 +1,7 @@
 nav:
     - index.md
-    - principles.md
+    - glossary.md
     - setup.md
+    - rest-api.md
     - config-file.md
     - creds-file.md

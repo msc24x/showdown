@@ -8,9 +8,11 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.superfences
   - tables
+  - pymdownx.snippets
 theme: 
   name: material
-  repo_url: https://github.com/msc24x/showdown
+  repo_url: https://github.com/msc24x/hunter
+  repo_name: msc24x/showdown
   shortcuts:
     help: 191    # ?
     search: 83   # s
