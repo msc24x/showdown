@@ -1,12 +1,12 @@
 # REST API
 
 All communication to any of the [Showdown servers](/glossary/#showdown-servers)
-is done via REST APIs. Currently its interface is the simplest as possible with limited
+is done via REST APIs. Currently, its interface is the simple as possible with limited
 endpoints.
 
 ## Authorization
-Showdown requests are authenticated with HTTP header `Access-token`, which can be
-specified by you in the [.env.creds](/creds-file) secrets file. By default that is empty,
+Showdown requests are authenticated with the HTTP header `Access-token``, which can be
+specified by you in the [.env.creds](/creds-file) secrets file. By default, this is empty,
 and hence unauthenticated requests will be able to communicate to your instance. Hence,
 we recommend to set `ACCESS_TOKEN` in your secrets.
 
@@ -97,8 +97,7 @@ const (
 ```
 
 ##### Status 401
-When HTTP header `Access-Token` is not identified by the application.
-
+When the HTTP header `Access-Token`` is not identified by the application.
 
 ### **POST** `/judge`
 Key endpoint to request Showdown for an execution of a process
@@ -137,7 +136,8 @@ curl  http://localhost:8000/judge \
 }
 ```
 
-#### Understanding request using internal types
+#### Understanding requests using internal types
+
 ```golang title="Top level schema"
 // Struct to define http request to showdown
 type JudgeRequest struct {
@@ -190,7 +190,7 @@ type ExecutionResponse struct {
 ```
 
 ##### Status 401
-When HTTP header `Access-Token` is not identified by the application.
+When the HTTP header `Access-Token`` is not identified by the application.
 
 ##### Status 400
 Following are the possible self-explanatory error strings.

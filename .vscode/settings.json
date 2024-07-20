@@ -1,3 +1,9 @@
 {
-	"go.lintTool": "staticcheck"
+	"go.lintTool": "staticcheck",
+	"grammarly.selectors": [
+		{
+			"language": "markdown",
+			"scheme": "file"
+		}
+	]
 }

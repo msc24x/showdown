@@ -2,55 +2,54 @@
 ## Perquisites
 !!! warning
 	After making sure you have your machine setup according to their requirements,
-	it is possible you might still face some issues. Go through this guide, when you
+	you might still face some issues. Go through this guide, when you
 	face the issues.
 
 To run Showdown, you only need [Docker](https://www.docker.com/) on your machine.
 
 Showdown uses ISOLATE to securely execute remote code. Which itself requires some
 configuration for it to work properly. Although most of the requirements should
-already be satisfied by any normal linux distribution. Most of its configuration (based
+already be satisfied by any normal Linux distribution. Most of its configuration (based
 on the ISOLATE's official [manual page](https://www.ucw.cz/moe/isolate.1.html)) is 
-already done in Showdown's compilers docker image. There are some steps that
-you might need to do on your servers to ensure its proper working.
+already done in Showdown's compiler docker image. There are some steps that
+you might need to do on your servers to ensure it's properly working.
 
 
 #### Not using --privileged
 The ISOLATE uses root privileges of the host machine as explained [here.](https://www.ucw.cz/moe/isolate.1.html#:~:text=Isolate%20is%20designed%20to%20run%20setuid%20to%20root.%20The%20sub%2Dprocess%20inside%20the%20sandbox%20then%20switches%20to%20a%20non%2Dprivileged%20user%20ID%20(different%20for%20each%20%2D%2Dbox%2Did).%20The%20range%20of%20UIDs%20available%20and%20several%20filesystem%20paths%20are%20set%20in%20a%20configuration%20file%2C%20by%20default%20located%20in%20/usr/local/etc/isolate) 
 
-Due to which the docker container for any Showdown instance must be started as `--privileged`
+Due to which, the docker container for any Showdown instance must be started as `--privileged`
 
 #### Error while "Initializing isolate box"
-This should be due to your control groups version. By default your machine might
+This should be due to your control group's version. By default your machine might
 have been using cg2, make sure to switch it to cg1.
 
 To ensure that it is the issue, run `ls /sys/fs/cgroup/` and if you don't see
-the directories (memory, cpuset, cpuacct), then it is definitely the issue. To
+the directories (memory, cpuset, cpuacct), then it is the issue. To
 fix it you need to switch your system to use control group version 1.
-See instructions [here](https://stackoverflow.com/a/76194598/11367677)
-to add following kernel parameters and restart the machine.
+See the instructions [here](https://stackoverflow.com/a/76194598/11367677) to add
+the following kernel parameters and restart the machine.
 
 ```
 cgroup_enable=memory 
 systemd.unified_cgroup_hierarchy=0
 ```
 
-
 ## Quick Start
 
 !!! note
 	This section only explains the most basic setup of only one mode of the Showdown.
-	See [installation](./setup.md) for depths and understanding.
+	See the [installation](./setup.md) for depth and understanding.
 
 ### Configuration
 
-You need to create two files in same directory.
+You need to create two files in the same directory.
 
 - .config (configuration file)
 - .env.creds (secrets file)
 
-Below are the example files that represents a valid configuration, but not limited
-to the variables mentioned. Full details on configuration can be found in other
+Below are the example files that represent a valid configuration, but are 
+not limited to the variables mentioned. Full details on configuration can be found in other
 sections.
 
 #### .config file example (manager/standalone)
@@ -104,7 +103,7 @@ sections.
 
 ### Installation ([Standalone](/glossary/#standalone))
 
-- Pull the latest docker images, and create network
+- Pull the latest docker images, and create a network
 ```bash
 docker pull msc24x/showdown:latest-standalone
 docker pull msc24x/showdown:latest-queue
@@ -132,7 +131,7 @@ docker run -d -p 7070:7070 \
 ```
 
 ### Installation ([Manager-Worker](/glossary/#manager))
-- Pull the latest docker images, and create network
+- Pull the latest docker images, and create a network
 ```bash
 docker pull msc24x/showdown:latest-manager
 docker pull msc24x/showdown:latest-worker
