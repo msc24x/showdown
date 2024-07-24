@@ -2,26 +2,45 @@ package judge
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"log"
 	"sync"
 	"time"
 
 	"github.com/msc24x/showdown/internal/app"
 	"github.com/msc24x/showdown/internal/config"
+	"github.com/msc24x/showdown/internal/engine"
 	"github.com/msc24x/showdown/internal/utils"
 
 	"github.com/google/uuid"
 )
+
+type InstanceConfig struct {
+	ActivePollingRate  int
+	RevivalPollingRate int
+	MaxActiveProcesses uint
+	MaxWorkerRetries   uint8
+
+	Env          string
+	ConfigFile   string
+	CredsFile    string
+	MessageQueue string
+
+	SupportedLanguages []*engine.Language
+}
 
 // A general state struct for any showdown instance.
 type InstanceState struct {
 	InstanceId   uint
 	InstanceType string
 	// Provides manager id if instance type is worker.
-	ManagerId uint
+	ManagerId              uint
+	ManagerInstanceAddress string
 	// Specifies if instance uses Access-Token.
 	Private bool
+
+	// Available instance configuration variables.
+	Config *InstanceConfig
 
 	// Not nil, if instance type is standalone/worker.
 	WorkerState *WorkerState
@@ -88,12 +107,33 @@ func RestoreManagerState() {
 	PingWorkers(SW_ACTIVE | SW_DROPPED | SW_STALLED)
 }
 
-func GetInstanceState() *InstanceState {
+func CollectInstanceConfig() *InstanceConfig {
+	res := InstanceConfig{
+		ActivePollingRate:  config.ACTIVE_POLLING_RATE,
+		RevivalPollingRate: config.REVIVAL_POLLING_RATE,
+		MaxActiveProcesses: config.MAX_ACTIVE_PROCESSES,
+		MaxWorkerRetries:   config.MAX_WORKER_RETRIES,
+		Env:                config.ENV,
+		ConfigFile:         config.CONFIG_FILE,
+		CredsFile:          config.CREDS_FILE,
+		MessageQueue:       fmt.Sprintf("%s:%s", config.RABBIT_MQ_HOST, config.RABBIT_MQ_PORT),
+		SupportedLanguages: engine.SUPPORTED_LANGUAGES,
+	}
+
+	return &res
+}
+
+func GetInstanceState(f_config bool) *InstanceState {
 	res := InstanceState{
-		InstanceId:   config.INSTANCE_ID,
-		ManagerId:    config.MANAGER_INSTANCE_ID,
-		InstanceType: config.INSTANCE_TYPE,
-		Private:      config.ACCESS_TOKEN != "",
+		InstanceId:             config.INSTANCE_ID,
+		ManagerId:              config.MANAGER_INSTANCE_ID,
+		InstanceType:           config.INSTANCE_TYPE,
+		Private:                config.ACCESS_TOKEN != "",
+		ManagerInstanceAddress: config.MANAGER_INSTANCE_ADDRESS,
+	}
+
+	if f_config {
+		res.Config = CollectInstanceConfig()
 	}
 
 	if config.INSTANCE_TYPE != config.T_MANAGER {

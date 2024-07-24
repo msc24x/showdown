@@ -110,7 +110,7 @@ func PingWorkers(status WorkerStatus) {
 		worker.LastFetchedState = state
 	}
 
-	res := GetInstanceState()
+	res := GetInstanceState(false)
 	state, _ := json.Marshal(res)
 	app.DumpInstanceState(state)
 }

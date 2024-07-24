@@ -102,7 +102,9 @@ func RegisterWorker(c *gin.Context) {
 }
 
 func Status(c *gin.Context) {
-	res := judge.GetInstanceState()
+	f_config := c.Query("config") == "true"
+
+	res := judge.GetInstanceState(f_config)
 	response, _ := json.Marshal(res)
 
 	c.Writer.Write(response)
