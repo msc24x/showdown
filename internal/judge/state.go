@@ -32,8 +32,6 @@ type InstanceState struct {
 // An in memory runtime information and statistics of the Showdown.
 type WorkerState struct {
 	StartedSince time.Time
-	// Total number of requests denied since start.
-	DeniedProcessed uint
 	// Total number of requests processed since start.
 	TotalProcessed uint
 	// Number of active requests being processed.
@@ -49,7 +47,11 @@ var (
 		ActiveProcesses: 0,
 		Processes:       make(map[string]bool),
 	}
+	// Used to read/write protect worker_state.
 	worker_state_mutex sync.Mutex
+	// Used to protect worker_state.ActiveProcesses from exceeding beyond
+	// MAX_ACTIVE_PROCESSES.
+	onboarding_mutex sync.Mutex
 )
 
 // Reads the instance dump file and restores the workers data.
@@ -105,16 +107,17 @@ func GetInstanceState() *InstanceState {
 
 // Record/verify an execution request.
 func OnboardProcess(pid uuid.UUID) (uint, error) {
+	onboarding_mutex.Lock()
+
 	worker_state_mutex.Lock()
 	defer worker_state_mutex.Unlock()
 
-	if worker_state.ActiveProcesses == config.MAX_ACTIVE_PROCESSES {
-		worker_state.DeniedProcessed++
-		return 0, errors.New("max active processes limit reached")
-	}
-
 	worker_state.ActiveProcesses++
 	worker_state.Processes[pid.String()] = true
+
+	if worker_state.ActiveProcesses < config.MAX_ACTIVE_PROCESSES {
+		onboarding_mutex.Unlock()
+	}
 
 	return config.MAX_ACTIVE_PROCESSES - worker_state.ActiveProcesses, nil
 }
@@ -126,6 +129,10 @@ func OffboardProcess(pid uuid.UUID) {
 
 	if !worker_state.Processes[pid.String()] {
 		panic("recording a process completion that was not recorded")
+	}
+
+	if worker_state.ActiveProcesses == config.MAX_ACTIVE_PROCESSES {
+		onboarding_mutex.Unlock()
 	}
 
 	delete(worker_state.Processes, pid.String())
