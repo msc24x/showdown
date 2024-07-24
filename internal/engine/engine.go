@@ -5,7 +5,6 @@ package engine
 import (
 	"errors"
 	"fmt"
-	"math/rand"
 	"os"
 	"os/exec"
 	"reflect"
@@ -228,8 +227,10 @@ func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest) error {
 	engine.Request = exe_req
 	engine.PID = pid
 
-	box_id := rand.Intn(int(config.MAX_ACTIVE_PROCESSES))
-	engine.isolateBoxID = box_id % int(config.MAX_ACTIVE_PROCESSES)
+	box_id, ok := AssignBoxId()
+	utils.BPanicIf(!ok, "Unable to to acquire an isolate box")
+
+	engine.isolateBoxID = box_id
 	engine.workDirectory = fmt.Sprintf("%s/%d/box", config.ISOLATE_WORKDIR, engine.isolateBoxID)
 
 	if err := engine.prepareIsolatedBox(true); err != nil {
@@ -282,8 +283,11 @@ func (engine *BaseEngine) Execute() ([]byte, error) {
 	return output, err
 }
 
-// Clean redundant files created during the execution.
+// Clean redundant files created during the execution, and frees the allocated.
+// isolate box.
 func (engine *BaseEngine) Clean() {
+	FreeBoxId(engine.isolateBoxID)
+
 	files_to_remove := []string{
 		fmt.Sprintf("%s/%s", engine.workDirectory, engine.sourceFilePath),
 		fmt.Sprintf("%s/%s", engine.workDirectory, engine.PID.String()),

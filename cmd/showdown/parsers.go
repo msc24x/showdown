@@ -81,6 +81,7 @@ func parseFlags() int {
 
 	if config.INSTANCE_TYPE != config.T_MANAGER {
 		engine.ImportPaths()
+		engine.AllocateBoxesPool()
 	}
 
 	if fHelp {
