@@ -281,9 +281,17 @@ func (engine *BaseEngine) Execute() ([]byte, error) {
 		engine.commandArgs...,
 	)
 
-	input_writer, _ := isolated_cmd.StdinPipe()
-	input_writer.Write([]byte(engine.Request.Input))
-	input_writer.Close()
+	input_file, err := os.Open(fmt.Sprintf("%s/%s", engine.workDirectory, engine.inputFilePath))
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer input_file.Close()
+
+	if !engine.languageInfo.Compiled {
+		isolated_cmd.Stdin = input_file
+	}
 
 	output, err := isolated_cmd.CombinedOutput()
 
@@ -296,6 +304,7 @@ func (engine *BaseEngine) Execute() ([]byte, error) {
 		isolated_exec, _ := engine.getIsolatedCommand(
 			fmt.Sprintf("./%s", engine.PID.String()),
 		)
+		isolated_exec.Stdin = input_file
 
 		return isolated_exec.CombinedOutput()
 	}
