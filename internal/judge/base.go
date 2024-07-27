@@ -22,15 +22,14 @@ type ExecutionProcess struct {
 
 // Struct to define the end results the users will receive.
 type ExecutionResponse struct {
-	PID         string `json:"pid"`
-	Webhook     string `json:"webhook"`
-	Success     bool   `json:"success"`
-	Judged      bool   `json:"judged"`
-	Error       string `json:"error"`
-	Output      string `json:"output"`
-	Meta        string `json:"meta"`
-	Expected    string `json:"expected"`
-	ServerFault bool   `json:"server_fault"`
+	PID         string  `json:"pid"`
+	Success     bool    `json:"success"`
+	Error       string  `json:"error"`
+	Output      string  `json:"output"`
+	Meta        string  `json:"meta"`
+	Expected    string  `json:"expected"`
+	ServerFault bool    `json:"server_fault"`
+	Params      *Params `json:"params"`
 }
 
 type Params struct {
@@ -40,11 +39,21 @@ type Params struct {
 
 	// Set this to true and Showdown will only execute the code, not judge.
 	DoNotJudge bool `json:"donotjudge"`
+
+	// Set this to true to collect meta information about process runtime.
+	CollectMeta bool `json:"collectmeta"`
+
+	// Set runtime limits in the engine for the user program.
+	Limits []*engine.Limits `json:"limits"`
 }
 
 func (params *Params) Validate() error {
 	if params.Webhook == "" && config.INSTANCE_TYPE == config.T_MANAGER {
 		return errors.New("webhook is mandatory for showdown manager instance")
+	}
+
+	if len(params.Limits) == 0 {
+		params.Limits = []*engine.Limits{engine.DEF_CMPL, engine.DEF_EXEC}
 	}
 
 	return nil
@@ -55,7 +64,6 @@ func JudgeExecutionRequest(exe_req *engine.ExecutionRequest, params *Params) (*E
 	pid := uuid.New()
 	response := ExecutionResponse{}
 	response.PID = pid.String()
-	response.Webhook = params.Webhook
 
 	if params.Webhook != "" {
 		queueRequest(pid, exe_req, params)

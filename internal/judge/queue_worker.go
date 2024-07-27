@@ -79,7 +79,7 @@ func processWorker(exe_proc *ExecutionProcess, offboard_c func(pid uuid.UUID)) {
 
 	var exe_response ExecutionResponse
 	exe_response.PID = exe_proc.PID
-	exe_response.Webhook = exe_proc.Params.Webhook
+	exe_response.Params = &exe_proc.Params
 
 	err := processRequest(
 		pid,
@@ -95,10 +95,10 @@ func processWorker(exe_proc *ExecutionProcess, offboard_c func(pid uuid.UUID)) {
 	logProcess(exe_proc.PID, "processed. Took %ds", time.Now().Unix()-start_time)
 
 	content := bytes.NewBufferString(res_text)
-	webhook_req, err := http.NewRequest("POST", exe_response.Webhook, content)
+	webhook_req, err := http.NewRequest("POST", exe_response.Params.Webhook, content)
 
 	if err != nil {
-		logProcess(exe_proc.PID, "unable create post request to the webhook '%s'", exe_response.Webhook)
+		logProcess(exe_proc.PID, "unable create post request to the webhook '%s'", exe_response.Params.Webhook)
 		return
 	}
 
@@ -107,7 +107,7 @@ func processWorker(exe_proc *ExecutionProcess, offboard_c func(pid uuid.UUID)) {
 	_, err = client.Do(webhook_req)
 
 	if err != nil {
-		logProcess(exe_proc.PID, "unable send post request to the webhook '%s'", exe_response.Webhook)
+		logProcess(exe_proc.PID, "unable send post request to the webhook '%s'", exe_response.Params.Webhook)
 		return
 	}
 }

@@ -60,10 +60,11 @@ type BaseEngine struct {
 	// Language information fetched from ExecutionRequest.
 	languageInfo *Language
 	// Memory and compute limits during execution.
-	limits      *Limits
-	command     string
-	commandArgs []string
-	envs        []string
+	limits       []*Limits
+	activeLimits *Limits
+	command      string
+	commandArgs  []string
+	envs         []string
 
 	// Not all instances have same working directory, which is determined by the isolateBoxId.
 	workDirectory  string
@@ -113,13 +114,7 @@ func (engine *BaseEngine) prepareFiles() error {
 
 // Loads required envs and command args based on the language of the request.
 func (engine *BaseEngine) prepareCommand() error {
-	engine.languageInfo = GetLanguageInfo(&engine.Request.Language)
-
-	if engine.languageInfo == nil {
-		return errors.New("cannot process given language")
-	}
-
-	if engine.languageInfo.BuildRequired {
+	if engine.languageInfo.Compiled {
 		engine.command = engine.languageInfo.CompilerPath
 	} else {
 		engine.command = engine.languageInfo.RunnerPath
@@ -200,17 +195,17 @@ func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec
 		"-E", "HOME=/tmp",
 		"-E", "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"}
 
-	if engine.limits.Memory != -1 {
-		isolate_args = append(isolate_args, "--cg-mem", fmt.Sprintf("%d", engine.limits.Memory))
+	if engine.activeLimits.Memory != -1 {
+		isolate_args = append(isolate_args, "--cg-mem", fmt.Sprintf("%d", engine.activeLimits.Memory))
 	}
-	if engine.limits.Stack != -1 {
-		isolate_args = append(isolate_args, "-k", fmt.Sprintf("%d", engine.limits.Stack))
+	if engine.activeLimits.Stack != -1 {
+		isolate_args = append(isolate_args, "-k", fmt.Sprintf("%d", engine.activeLimits.Stack))
 	}
-	if engine.limits.Time != -1 {
-		isolate_args = append(isolate_args, "-t", fmt.Sprintf("%f", engine.limits.Time))
+	if engine.activeLimits.Time != -1 {
+		isolate_args = append(isolate_args, "-t", fmt.Sprintf("%f", engine.activeLimits.Time))
 	}
-	if engine.limits.WallTime != -1 {
-		isolate_args = append(isolate_args, "-w", fmt.Sprintf("%f", engine.limits.WallTime))
+	if engine.activeLimits.WallTime != -1 {
+		isolate_args = append(isolate_args, "-w", fmt.Sprintf("%f", engine.activeLimits.WallTime))
 	}
 
 	isolate_args = append(isolate_args, "--run", "--", name)
@@ -223,9 +218,15 @@ func (engine *BaseEngine) getIsolatedCommand(name string, args ...string) (*exec
 // Initializes an isolated box by Isolate binary, puts the required files in
 // working directory created by the isolate and set the command and args
 // to be executed. This must be executed in order to use BaseEngine.
-func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest) error {
+func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest, limits []*Limits) error {
 	engine.Request = exe_req
 	engine.PID = pid
+	engine.limits = limits
+	engine.languageInfo = GetLanguageInfo(&exe_req.Language)
+
+	if engine.languageInfo == nil {
+		return errors.New("cannot process given language")
+	}
 
 	box_id, ok := AssignBoxId()
 	utils.BPanicIf(!ok, "Unable to to acquire an isolate box")
@@ -248,14 +249,33 @@ func (engine *BaseEngine) Init(pid uuid.UUID, exe_req *ExecutionRequest) error {
 	return nil
 }
 
+func (engine *BaseEngine) selectCompileLimits() *Limits {
+	return engine.limits[0]
+}
+
+func (engine *BaseEngine) selectExecuteLimits() *Limits {
+	if len(engine.limits) > 1 {
+		return engine.limits[1]
+	} else {
+		return engine.selectCompileLimits()
+	}
+}
+
+func (engine *BaseEngine) setLimits() {
+	utils.BPanicIf(len(engine.limits) == 0, "Invalid limits")
+
+	if engine.languageInfo.Compiled {
+		engine.activeLimits = engine.selectCompileLimits()
+	} else {
+		engine.activeLimits = engine.selectExecuteLimits()
+	}
+}
+
 // Works after the engine has been initialized. This method compiles the code
 // if required and executes the submitted code. Returns the output bytes.
 func (engine *BaseEngine) Execute() ([]byte, error) {
-	if engine.languageInfo.BuildRequired {
-		engine.limits = DEF_CMPL
-	} else {
-		engine.limits = DEF_EXEC
-	}
+	engine.setLimits()
+
 	isolated_cmd, _ := engine.getIsolatedCommand(
 		engine.command,
 		engine.commandArgs...,
@@ -271,8 +291,8 @@ func (engine *BaseEngine) Execute() ([]byte, error) {
 		return output, err
 	}
 
-	if engine.languageInfo.BuildRequired {
-		engine.limits = DEF_EXEC
+	if engine.languageInfo.Compiled {
+		engine.activeLimits = engine.selectExecuteLimits()
 		isolated_exec, _ := engine.getIsolatedCommand(
 			fmt.Sprintf("./%s", engine.PID.String()),
 		)

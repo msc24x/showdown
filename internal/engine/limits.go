@@ -3,13 +3,13 @@ package engine
 // Set of limits that can be applied on the BaseEngine before Execute.
 type Limits struct {
 	// CPU time allowed in seconds.
-	Time float32
+	Time float32 `json:"time"`
 	// Total program execution time in seconds.
-	WallTime float32
+	WallTime float32 `json:"wall_time"`
 	// Max memory limit in KBs.
-	Memory int
+	Memory int `json:"memory"`
 	// Max stack limit in KBs, although part of the Memory.
-	Stack int
+	Stack int `json:"stack"`
 }
 
 var (

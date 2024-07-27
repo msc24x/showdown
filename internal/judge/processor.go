@@ -89,21 +89,25 @@ func judgeLines(test [][]rune, truth [][]rune) bool {
 
 // Executes and judge (optional) the execution request synchronously.
 func processRequest(pid uuid.UUID, exe_req *engine.ExecutionRequest, params *Params, response *ExecutionResponse) error {
-	engine := engine.BaseEngine{}
+	base_engine := engine.BaseEngine{}
 
-	if err := engine.Init(pid, exe_req); err != nil {
+	if err := base_engine.Init(pid, exe_req, params.Limits); err != nil {
 		return err
 	}
-	defer engine.Clean()
 
-	output, err := engine.Execute()
+	defer base_engine.Clean()
+
+	output, err := base_engine.Execute()
+	response.Params = params
 	response.Output = string(output)
 
-	if !params.DoNotJudge {
-		response.Judged = true
-		response.Expected = string(exe_req.Output)
-		meta_info, _ := engine.CollectMeta()
+	if params.CollectMeta {
+		meta_info, _ := base_engine.CollectMeta()
 		response.Meta = string(meta_info)
+	}
+
+	if !params.DoNotJudge {
+		response.Expected = string(exe_req.Output)
 
 		if err != nil {
 			response.Error = err.Error()

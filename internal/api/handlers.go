@@ -21,7 +21,7 @@ type JudgeRequest struct {
 func DebugWebhook(c *gin.Context) {
 	if b, err := io.ReadAll(c.Request.Body); err == nil {
 		fmt.Printf("Debug webhook triggered with content of %d bytes\n", len(b))
-		// log.Println(string(b))
+		// fmt.Println(string(b))
 	}
 }
 

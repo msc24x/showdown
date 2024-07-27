@@ -17,9 +17,9 @@ type Language struct {
 
 	// Specifies if the language is compiled or not, whether to use a compiler
 	// path of the runner path.
-	BuildRequired bool
-	RunnerPath    string
-	CompilerPath  string
+	Compiled     bool
+	RunnerPath   string
+	CompilerPath string
 
 	DefaultEnvs []string
 	SubCommands []string
@@ -34,50 +34,50 @@ const (
 
 var (
 	PYTHON = Language{
-		Format:        config.PYTHON,
-		BuildRequired: false,
-		RunnerPath:    "/opt/python/3.12.0/bin/python3",
-		CompilerPath:  "",
-		Supported:     true,
+		Format:       config.PYTHON,
+		Compiled:     false,
+		RunnerPath:   "/opt/python/3.12.0/bin/python3",
+		CompilerPath: "",
+		Supported:    true,
 	}
 	CPP = Language{
-		Format:        config.CPP,
-		BuildRequired: true,
-		RunnerPath:    "",
-		CompilerPath:  "/usr/bin/g++",
-		Supported:     true,
-		SubCommands:   []string{CMD_FILE, "-o", CMD_OUT},
+		Format:       config.CPP,
+		Compiled:     true,
+		RunnerPath:   "",
+		CompilerPath: "/usr/bin/g++",
+		Supported:    true,
+		SubCommands:  []string{CMD_FILE, "-o", CMD_OUT},
 	}
 	C = Language{
-		Format:        config.C,
-		BuildRequired: true,
-		RunnerPath:    "",
-		CompilerPath:  "/usr/bin/gcc",
-		Supported:     true,
-		SubCommands:   []string{CMD_FILE, "-o", CMD_OUT},
+		Format:       config.C,
+		Compiled:     true,
+		RunnerPath:   "",
+		CompilerPath: "/usr/bin/gcc",
+		Supported:    true,
+		SubCommands:  []string{CMD_FILE, "-o", CMD_OUT},
 	}
 	JAVASCRIPT = Language{
-		Format:        config.JAVASCRIPT,
-		BuildRequired: false,
-		RunnerPath:    "/usr/bin/node",
-		CompilerPath:  "",
-		Supported:     true,
+		Format:       config.JAVASCRIPT,
+		Compiled:     false,
+		RunnerPath:   "/usr/bin/node",
+		CompilerPath: "",
+		Supported:    true,
 	}
 	TYPESCRIPT = Language{
-		Format:        config.TYPESCRIPT,
-		BuildRequired: false,
-		RunnerPath:    "/usr/bin/ts-node",
-		CompilerPath:  "",
-		Supported:     true,
-		DefaultEnvs:   []string{"TS_NODE_FILES=true"},
+		Format:       config.TYPESCRIPT,
+		Compiled:     false,
+		RunnerPath:   "/usr/bin/ts-node",
+		CompilerPath: "",
+		Supported:    true,
+		DefaultEnvs:  []string{"TS_NODE_FILES=true"},
 	}
 	GOLANG = Language{
-		Format:        config.GOLANG,
-		BuildRequired: true,
-		RunnerPath:    "",
-		CompilerPath:  "/usr/local/go/bin/go",
-		Supported:     true,
-		SubCommands:   []string{"build"},
+		Format:       config.GOLANG,
+		Compiled:     true,
+		RunnerPath:   "",
+		CompilerPath: "/usr/local/go/bin/go",
+		Supported:    true,
+		SubCommands:  []string{"build"},
 	}
 )
 
