@@ -1,4 +1,4 @@
-![](banner.png)
+![](assets/banner.png)
 # Showdown
 [Showdown](https://github.com/msc24x/showdown) is a portable remote code execution and judge server, written in GoLang,
 that supports multiple popular programming languages.
