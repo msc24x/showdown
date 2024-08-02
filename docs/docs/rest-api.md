@@ -1,4 +1,4 @@
-# REST API
+# RESTful API
 
 All communication to any of the [Showdown servers](/glossary/#showdown-servers)
 is done via REST APIs. Currently, its interface is the simple as possible with limited

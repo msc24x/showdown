@@ -13,7 +13,7 @@
 | MANAGER_INSTANCE_ADDRESS | Specifies the full address of the manager instance to which current worker instance must connect | nil | For Worker instances only, required |
 | C | gcc compiler path | /usr/bin/gcc | - |
 | CPP | g++ compiler path | /usr/bin/g++ | - |
-| PY | python interpreter path | /opt/python/3.12.0/bin/python3 | - |
+| PY | python interpreter path | `/opt/python/3.12.0/bin/python3` | - |
 | GO | go compiler path | /usr/local/go/bin/go | - |
 | JS | node path | /usr/bin/node | - |
 | TS | ts-node path | /usr/bin/ts-node | - |

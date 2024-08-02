@@ -2,6 +2,6 @@ nav:
     - index.md
     - glossary.md
     - setup.md
+    - config.md
+    - credentials.md
     - rest-api.md
-    - config-file.md
-    - creds-file.md

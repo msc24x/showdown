@@ -32,8 +32,8 @@ or just keep running it and let the workers work themselves to death, along
 with your application.
 
 After processing the messages the results should be returned to the corresponding
-clients. [Manager](/glossary/#manager) ensures that the client has sent a webhook
-URL along with the request, which is used by the workers to send the response to.
+clients. The [Manager](/glossary/#manager) ensures that the client has sent a webhook
+URL along with the request, which is used by the workers to send the response.
 
 ### Manager
 It listens on a port for process requests and just adds the process to the message queue.
@@ -62,7 +62,7 @@ the results directly in the API response.
 But note that as it does allow non-webhook requests, the application will still act
 upon the [MAX_ACTIVE_PROCESSES](/config-file) set in the configuration file. Exceeding that limit,
 a standalone instance will start to reject requests with the error `max active` processes limit reached`.In that case,
-the client must use a webhook. The limit can be modified in the [.config](/config-file)](/config-file)
+the client must use a webhook. The limit can be modified in the [.config](/config-file) file
 according to your application needs.
 
 

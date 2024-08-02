@@ -1,4 +1,4 @@
-site_name: Showdown
+site_name: Showdown docs
 plugins:
   - search
   - awesome-pages
@@ -9,11 +9,16 @@ markdown_extensions:
   - pymdownx.superfences
   - tables
   - pymdownx.snippets
+extra_css:
+  - stylesheets/extra.css
+copyright: <a href='https://showdown.cambo.in'>Showdown is an open source remote code execution engine</a> built with &#10084; by <a href="https://cambo.in">Maninderpal Singh</a>
 theme: 
   name: material
   logo: assets/images/favicon.png
   repo_url: https://github.com/msc24x/hunter
   repo_name: msc24x/showdown
+  font:
+    text: Poppins
   shortcuts:
     help: 191    # ?
     search: 83   # s
@@ -24,6 +29,7 @@ theme:
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
+      primary: custom
       toggle:
         icon: material/brightness-auto
         name: Switch to light mode
@@ -31,6 +37,7 @@ theme:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default 
+      primary: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode

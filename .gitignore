@@ -4,3 +4,4 @@ build/
 .env.creds
 .config
 docs/site
+curltest.sh

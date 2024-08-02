@@ -45,8 +45,8 @@ systemd.unified_cgroup_hierarchy=0
 
 You need to create two files in the same directory.
 
-- .config (configuration file)
-- .env.creds (secrets file)
+- .config ([configuration file](./config.md))
+- .env.creds ([secrets file](./credentials.md))
 
 Below are the example files that represent a valid configuration, but are 
 not limited to the variables mentioned. Full details on configuration can be found in other
