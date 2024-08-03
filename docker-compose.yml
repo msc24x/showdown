@@ -3,6 +3,9 @@ version: '3.8'
 networks:
   showdown:
 
+volumes:
+  showdown-mq-data:
+
 services:
   showdown-standalone:
     image: msc24x/showdown:latest-standalone
@@ -35,6 +38,8 @@ services:
       - RABBIT_MQ_USER=$RABBIT_MQ_USER
       - RABBIT_MQ_PASSWORD=$RABBIT_MQ_PASSWORD
     restart: always
+    volumes:
+      - showdown-mq-data:/var/lib/rabbitmq
     networks:
       - showdown
 

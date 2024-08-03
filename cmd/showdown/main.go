@@ -16,7 +16,7 @@ import (
 )
 
 func initLogs() *os.File {
-	log.Println("Log file", config.LOG_FILE, "initializing...")
+	log.Println("Attaching logger at", config.LOG_FILE)
 
 	log_file, err := os.OpenFile(config.LOG_FILE, os.O_APPEND, 0666)
 

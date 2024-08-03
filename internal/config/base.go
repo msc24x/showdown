@@ -50,7 +50,7 @@ var (
 	PROTOCOL    = "http"
 	HOST        = "0.0.0.0"
 	PORT        = 7070
-	ENV         = ENV_DEV
+	ENV         = ENV_PROD
 	CONFIG_FILE = "env/.config"
 	CREDS_FILE  = "env/.env.creds"
 

@@ -16,11 +16,13 @@ type BoxesPool struct {
 	mutex    sync.Mutex
 }
 
-var boxes_pool BoxesPool
+var boxes_pool *BoxesPool
 
 // Allocates memory to initialize isolate boxes pool.
 func AllocateBoxesPool() {
-	boxes_pool = BoxesPool{
+	utils.BPanicIf(boxes_pool != nil, "boxes pool is already allocated")
+
+	boxes_pool = &BoxesPool{
 		acquired: make([]bool, config.MAX_ACTIVE_PROCESSES),
 		mutex:    sync.Mutex{},
 	}
