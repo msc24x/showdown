@@ -35,14 +35,25 @@ func (exeReq *ExecutionRequest) Validate() error {
 	}
 
 	fields := reflect.ValueOf(exeReq).Elem()
+	is_optional := func(name string) bool {
+		optional_fields := []string{"Input", "Output"}
+
+		for _, optional_field := range optional_fields {
+			if optional_field == name {
+				return true
+			}
+		}
+
+		return false
+	}
 
 	for i := 0; i < fields.NumField(); i++ {
 
 		field_val := fields.Field(i)
-		field_name := fields.Type().Field(i).Tag
+		field_name := fields.Type().Field(i)
 
-		if field_val.String() == "" {
-			return fmt.Errorf("%s is a required field", field_name)
+		if field_val.String() == "" && !is_optional(field_name.Name) {
+			return fmt.Errorf("%s is a required field", field_name.Tag)
 		}
 	}
 	return nil
