@@ -12,7 +12,7 @@ func AccessToken() gin.HandlerFunc {
 		token := ctx.GetHeader("Access-Token")
 		wh_secret := ctx.GetHeader("Webhook-Secret")
 
-		if token != config.ACCESS_TOKEN && wh_secret != config.WEBHOOK_SECRET {
+		if token != config.ACCESS_TOKEN && wh_secret != config.ACCESS_TOKEN {
 			ctx.String(401, "Unauthorized")
 			ctx.Abort()
 			return

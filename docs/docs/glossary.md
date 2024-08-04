@@ -5,9 +5,9 @@ A webhook is a URL a client may specify along with the process request to Showdo
 Using this parameter, Showdown will execute the process asynchronously and will
 hit the webhook with the process results as a response.
 
-Your application must set `WEBHOOK_SECRET` in [.env.creds](/creds-file) secrets file.
+Your application can set `webhook_secret` in any request along with the webhook.
 That will result in Showdown workers sending `Webhook-Secret` HTTP header in the webhook requests
-so that your application can be identified that the request is valid and is made
+so that your application can identify if the request is valid and is made
 by an actual Showdown server. 
 
 ## Message queue

@@ -37,6 +37,10 @@ type Params struct {
 	// instead of an immediate response.
 	Webhook string `json:"webhook"`
 
+	// Set the webhook secret, that will be sent in headers for webhook request,
+	// so that clients can ensure that it is an genuine request.
+	WebhookSecret string `json:"webhook_secret"`
+
 	// Set this to true and Showdown will only execute the code, not judge.
 	DoNotJudge bool `json:"donotjudge"`
 

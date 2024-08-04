@@ -28,8 +28,6 @@ const (
 var (
 	// If set, requests to this instances would require the client to send it.
 	ACCESS_TOKEN = ""
-	// If set, client can verify if a webhook has actually been called by Showdown.
-	WEBHOOK_SECRET = ""
 	// It is set automatically, however prone to changes if a worker re-authenticates.
 	INSTANCE_ID uint = 1
 	// It is set for workers, as its mandatory for them to connect to a manager.

@@ -43,7 +43,6 @@ func parseCreds() {
 	utils.PanicIf(err)
 
 	config.ACCESS_TOKEN = envMap["ACCESS_TOKEN"]
-	config.WEBHOOK_SECRET = envMap["WEBHOOK_SECRET"]
 	config.RABBIT_MQ_HOST = envMap["RABBIT_MQ_HOST"]
 	config.RABBIT_MQ_PORT = envMap["RABBIT_MQ_PORT"]
 	config.RABBIT_MQ_USER = envMap["RABBIT_MQ_USER"]

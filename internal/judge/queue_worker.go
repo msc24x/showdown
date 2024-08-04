@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/msc24x/showdown/internal/config"
 	"github.com/msc24x/showdown/internal/mq"
 	"github.com/msc24x/showdown/internal/utils"
 
@@ -103,7 +102,12 @@ func processWorker(exe_proc *ExecutionProcess, offboard_c func(pid uuid.UUID)) {
 	}
 
 	client := http.Client{}
-	webhook_req.Header.Set("Webhook-Secret", config.WEBHOOK_SECRET)
+
+	// If webhook secret was provided, send it in headers.
+	if exe_response.Params.WebhookSecret != "" {
+		webhook_req.Header.Set("Webhook-Secret", exe_response.Params.WebhookSecret)
+	}
+
 	_, err = client.Do(webhook_req)
 
 	if err != nil {
