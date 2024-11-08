@@ -5,3 +5,4 @@ build/
 .config
 docs/site
 curltest.sh
+env/standalone/log.log

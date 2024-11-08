@@ -61,7 +61,7 @@ the results directly in the API response.
 
 But note that as it does allow non-webhook requests, the application will still act
 upon the [MAX_ACTIVE_PROCESSES](/config-file) set in the configuration file. Exceeding that limit,
-a standalone instance will start to reject requests with the error `max active` processes limit reached`.In that case,
+a standalone instance will start to reject requests with the error `max active processes limit reached`. In that case,
 the client must use a webhook. The limit can be modified in the [.config](/config-file) file
 according to your application needs.
 
