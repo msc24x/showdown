@@ -39,6 +39,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_$X_NODE_VERSION | sudo bash - &&
 RUN npm install -g typescript && \
     npm install -g ts-node
 
+# JAVA
+ENV X_JAVA_VERSION 21
+RUN sudo apt-get install -y wget gnupg ca-certificates lsb-release
+RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo gpg --dearmor -o /usr/share/keyrings/adoptium-archive-keyring.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/adoptium-archive-keyring.gpg] https://packages.adoptium.net/artifactory/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
+RUN sudo apt-get update
+RUN sudo apt-get install -y temurin-$X_JAVA_VERSION-jdk
+
+ENV COMPILERS_PATH=$COMPILERS_PATH:/usr/lib/jvm/temurin-$X_JAVA_VERSION-jdk-amd64/bin
 
 # ISOLATE
 RUN apt-get -y install git libcap-dev libsystemd-dev pkg-config

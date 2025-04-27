@@ -79,6 +79,13 @@ var (
 		Supported:    true,
 		SubCommands:  []string{"build"},
 	}
+	JAVA = Language{
+		Format:       config.JAVA,
+		Compiled:     false,
+		RunnerPath:   "/usr/lib/jvm/temurin-21-jdk-amd64/bin/java",
+		CompilerPath: "",
+		Supported:    true,
+	}
 )
 
 var SUPPORTED_LANGUAGES = []*Language{
@@ -88,6 +95,7 @@ var SUPPORTED_LANGUAGES = []*Language{
 	&JAVASCRIPT,
 	&TYPESCRIPT,
 	&GOLANG,
+	&JAVA,
 }
 
 // Import paths from file config.CONFIG_FILE.

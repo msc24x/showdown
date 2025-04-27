@@ -19,6 +19,7 @@ const (
 	JAVASCRIPT = "js"
 	PYTHON     = "py"
 	GOLANG     = "go"
+	JAVA       = "java"
 
 	T_STANDALONE = "standalone"
 	T_MANAGER    = "manager"
