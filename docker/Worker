@@ -7,7 +7,7 @@ WORKDIR $APP_DIR
 
 RUN go build -o ./server ./cmd/showdown
 
-FROM msc24x/showdown:latest-compilers AS server
+FROM compilers-base AS server
 
 ENV APP_DIR /showdown
 WORKDIR $APP_DIR
@@ -24,7 +24,7 @@ RUN mkdir -p tools/isolate/bin && cp $ISOLATE_PATH tools/isolate/bin/isolate
 RUN mkdir -p tmp
 RUN mkdir -p env
 
-ENV PATH=$PATH$COMPILERS_PATH
+ENV PATH=$PATH:$COMPILERS_PATH
 
 USER showdown
 

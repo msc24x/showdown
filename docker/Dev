@@ -1,4 +1,4 @@
-FROM msc24x/showdown:latest-compilers AS server
+FROM compilers-base AS server
 
 ENV APP_DIR /showdown
 WORKDIR $APP_DIR
@@ -9,7 +9,7 @@ RUN adduser showdown \
 ADD . .
 
 RUN chown -R showdown:1000 $APP_DIR
-ENV PATH=$PATH$COMPILERS_PATH
+ENV PATH=$PATH:$COMPILERS_PATH
 
 USER showdown
 

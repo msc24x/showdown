@@ -1,62 +1,75 @@
-FROM ubuntu
+# -------- Stage 1: Go runtime --------
+FROM golang:1.20.7 AS go
 
-ENV COMPILERS_PATH ""
+# -------- Stage 2: Python runtime --------
+FROM python:3.12.0-slim AS python
 
-# C & C++
-RUN apt-get update && \
-    apt-get install -y build-essential
+# -------- Stage 3: Node runtime --------
+FROM node:20 AS node
 
-RUN apt-get -y install curl sudo zlib1g-dev
+# -------- Final runtime image --------
+FROM ubuntu:22.04
 
-# GOLANG
-ENV X_GOLANG_VERSION 1.20.7
-RUN curl -OLf https://golang.org/dl/go$X_GOLANG_VERSION.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go$X_GOLANG_VERSION.linux-amd64.tar.gz
+ENV DEBIAN_FRONTEND=noninteractive
+ENV COMPILERS_PATH=""
 
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    zlib1g-dev \
+    wget \
+    gnupg \
+    ca-certificates \
+    lsb-release \
+    git \
+    libcap-dev \
+    libsystemd-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# ---------- Go ----------
+COPY --from=go /usr/local/go /usr/local/go
 ENV COMPILERS_PATH=$COMPILERS_PATH:/usr/local/go/bin
 
-# Python
-ENV X_PYTHON_VERSION 3.12.0
-RUN curl -Of https://www.python.org/ftp/python/${X_PYTHON_VERSION}/Python-${X_PYTHON_VERSION}.tgz && \
-    tar -xvzf Python-${X_PYTHON_VERSION}.tgz
-RUN cd Python-${X_PYTHON_VERSION} && \
-    ./configure \
-        --prefix=/opt/python/${X_PYTHON_VERSION} \
-        --enable-shared \
-        --enable-optimizations \
-        --enable-ipv6 \
-        LDFLAGS=-Wl,-rpath=/opt/python/${X_PYTHON_VERSION}/lib,--disable-new-dtags
-RUN cd Python-${X_PYTHON_VERSION} && \
-    make && \
-    sudo make install
+# ---------- Python ----------
+COPY --from=python /usr/local /usr/local
+ENV COMPILERS_PATH=$COMPILERS_PATH:/usr/local/bin
 
-ENV COMPILERS_PATH=$COMPILERS_PATH:/opt/python/$X_PYTHON_VERSION/bin/
+# ---------- Node ----------
+COPY --from=node /usr/local /usr/local
 
-# NODE
-ENV X_NODE_VERSION 20.x
-RUN curl -fsSL https://deb.nodesource.com/setup_$X_NODE_VERSION | sudo bash - && \
-    sudo apt-get install -y nodejs
-RUN npm install -g typescript && \
-    npm install -g ts-node
+RUN npm install -g typescript ts-node
 
-# JAVA
-ENV X_JAVA_VERSION 21
-RUN sudo apt-get install -y wget gnupg ca-certificates lsb-release
-RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo gpg --dearmor -o /usr/share/keyrings/adoptium-archive-keyring.gpg
-RUN echo "deb [signed-by=/usr/share/keyrings/adoptium-archive-keyring.gpg] https://packages.adoptium.net/artifactory/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
-RUN sudo apt-get update
-RUN sudo apt-get install -y temurin-$X_JAVA_VERSION-jdk
+# ---------- Java ----------
+ENV X_JAVA_VERSION=21
 
-ENV COMPILERS_PATH=$COMPILERS_PATH:/usr/lib/jvm/temurin-$X_JAVA_VERSION-jdk-amd64/bin
+RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public \
+    | gpg --dearmor -o /usr/share/keyrings/adoptium-archive-keyring.gpg
 
-# ISOLATE
-RUN apt-get -y install git libcap-dev libsystemd-dev pkg-config
+RUN echo "deb [signed-by=/usr/share/keyrings/adoptium-archive-keyring.gpg] \
+https://packages.adoptium.net/artifactory/deb $(lsb_release -cs) main" \
+> /etc/apt/sources.list.d/adoptium.list
 
+RUN apt-get update && \
+    apt-get install -y temurin-${X_JAVA_VERSION}-jdk && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install SUDO
+RUN apt-get update && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
+
+ENV JAVA_HOME=/usr/lib/jvm/temurin-${X_JAVA_VERSION}-jdk
+ENV COMPILERS_PATH=$COMPILERS_PATH:$JAVA_HOME/bin
+
+# ---------- Isolate ----------
 RUN git clone --depth 1 --branch v1.10.1 https://github.com/ioi/isolate && \
     cd isolate && \
-    sudo make isolate && \
-    sudo make install
+    make isolate && \
+    make install && \
+    cd .. && \
+    rm -rf isolate
+ENV ISOLATE_PATH=/usr/local/bin/isolate
 
-ENV ISOLATE_PATH=${pwd}/isolate/isolate
+# ---------- Final PATH ----------
+ENV PATH=$COMPILERS_PATH:$PATH
 
-RUN rm -rf /tmp/*
+WORKDIR /sandbox
