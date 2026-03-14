@@ -70,6 +70,7 @@ var (
 		CompilerPath: "",
 		Supported:    true,
 		DefaultEnvs:  []string{"TS_NODE_FILES=true"},
+		SubCommands:  []string{"--no-warnings=ExperimentalWarning", "--loader", "/usr/local/lib/node_modules/ts-node/esm.mjs"},
 	}
 	GOLANG = Language{
 		Format:       config.GOLANG,

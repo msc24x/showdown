@@ -57,10 +57,10 @@ sections.
 	# Default paths for showdown to work (change only if you know what you are doing)
 	C=/usr/bin/gcc
 	CPP=/usr/bin/g++
-	PY=/opt/python/3.12.0/bin/python3
+	PY=/usr/local/bin/python3
 	GO=/usr/local/go/bin/go
-	JS=/usr/bin/node
-	TS=/usr/bin/ts-node
+	JS=/usr/local/node
+	TS=/usr/local/ts-node
 
 	# Specify the path of creds file
 	CREDS_FILE=env/.env.creds
@@ -74,10 +74,10 @@ sections.
 	# Default paths for showdown to work (change only if you know what you are doing)
 	C=/usr/bin/gcc
 	CPP=/usr/bin/g++
-	PY=/opt/python/3.12.0/bin/python3
+	PY=/usr/local/bin/python3
 	GO=/usr/local/go/bin/go
-	JS=/usr/bin/node
-	TS=/usr/bin/ts-node
+	JS=/usr/local/node
+	TS=/usr/local/ts-node
 
 	# Specify the path of creds file
 	CREDS_FILE=env/.env.creds
