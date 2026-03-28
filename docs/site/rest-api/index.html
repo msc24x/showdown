@@ -1,0 +1,955 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../credentials/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.26">
+    
+    
+      
+        <title>RESTful API - Showdown docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Poppins";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#restful-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Showdown docs" class="md-header__button md-logo" aria-label="Showdown docs" data-md-component="logo">
+      
+  <img src="../assets/images/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Showdown docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RESTful API
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Showdown docs" class="md-nav__button md-logo" aria-label="Showdown docs" data-md-component="logo">
+      
+  <img src="../assets/images/favicon.png" alt="logo">
+
+    </a>
+    Showdown docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configuration file (.config)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../credentials/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Credentials file (.env.creds)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    RESTful API
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    RESTful API
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      GET /status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GET /status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#understanding-response-using-internal-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding response using internal types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding response using internal types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status-200" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 200
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-401" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 401
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-judge" class="md-nav__link">
+    <span class="md-ellipsis">
+      POST /judge
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="POST /judge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#understanding-requests-using-internal-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding requests using internal types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understanding-response-using-internal-types_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding response using internal types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding response using internal types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status-200_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 200
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-401_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 401
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-400" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 400
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-500" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 500
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authorization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Endpoints
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Endpoints">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      GET /status
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GET /status">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#understanding-response-using-internal-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding response using internal types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding response using internal types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status-200" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 200
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-401" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 401
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-judge" class="md-nav__link">
+    <span class="md-ellipsis">
+      POST /judge
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="POST /judge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#understanding-requests-using-internal-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding requests using internal types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#understanding-response-using-internal-types_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding response using internal types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding response using internal types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status-200_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 200
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-401_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 401
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-400" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 400
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-500" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status 500
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="restful-api">RESTful API</h1>
+<p>All communication to any of the <a href="/glossary/#showdown-servers">Showdown servers</a>
+is done via REST APIs. Currently, its interface is the simple as possible with limited
+endpoints.</p>
+<h2 id="authorization">Authorization</h2>
+<p>Showdown requests are authenticated with the HTTP header <code>Access-token</code>, which can be
+specified by you in the <a href="/creds-file">.env.creds</a> secrets file. By default, this is empty,
+and hence unauthenticated requests will be able to communicate to your instance. Hence,
+we recommend setting <code>ACCESS_TOKEN</code> in your secrets.</p>
+<h2 id="endpoints">Endpoints</h2>
+<h3 id="get-status"><strong>GET</strong> <code>/status</code></h3>
+<p>Get the status of an Instance.
+<div class="highlight"><span class="filename">curl</span><pre><span></span><code>curl<span class="w"> </span>http://localhost:8000/status<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-H<span class="w"> </span><span class="s2">&quot;Access-Token: abcdefghijklmnopqrstuvqxyz&quot;</span><span class="w"> </span><span class="se">\</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">example response (standalone instance)</span><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;InstanceId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;InstanceType&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standalone&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;ManagerId&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;Private&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;WorkerState&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;StartedSince&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-07-15T01:27:19.804548221Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;TotalProcessed&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ActiveProcesses&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Processes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;Workers&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<h4 id="understanding-response-using-internal-types">Understanding response using internal types</h4>
+<h5 id="status-200">Status 200</h5>
+<p><div class="highlight"><span class="filename">Top level schema</span><pre><span></span><code><span class="c1">// A general state struct for any showdown instance.</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">InstanceState</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">InstanceId</span><span class="w">   </span><span class="kt">uint</span>
+<span class="w">    </span><span class="nx">InstanceType</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">    </span><span class="c1">// Provides manager id if instance type is worker.</span>
+<span class="w">    </span><span class="nx">ManagerId</span><span class="w"> </span><span class="kt">uint</span>
+<span class="w">    </span><span class="c1">// Specifies if instance uses Access-Token.</span>
+<span class="w">    </span><span class="nx">Private</span><span class="w"> </span><span class="kt">bool</span>
+
+<span class="w">    </span><span class="c1">// Not nil, if instance type is standalone/worker.</span>
+<span class="w">    </span><span class="nx">WorkerState</span><span class="w"> </span><span class="o">*</span><span class="nx">WorkerState</span>
+<span class="w">    </span><span class="c1">// Specifies connected workers if instance type is manager.</span>
+<span class="w">    </span><span class="nx">Workers</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">ShowdownWorker</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">InstanceState.WorkerState schema</span><pre><span></span><code><span class="c1">// An in memory runtime information and statistics of the Showdown.</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">WorkerState</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">StartedSince</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+<span class="w">    </span><span class="c1">// Total number of requests denied since start.</span>
+<span class="w">    </span><span class="nx">DeniedProcessed</span><span class="w"> </span><span class="kt">uint</span>
+<span class="w">    </span><span class="c1">// Total number of requests processed since start.</span>
+<span class="w">    </span><span class="nx">TotalProcessed</span><span class="w"> </span><span class="kt">uint</span>
+<span class="w">    </span><span class="c1">// Number of active requests being processed.</span>
+<span class="w">    </span><span class="nx">ActiveProcesses</span><span class="w"> </span><span class="kt">uint</span>
+<span class="w">    </span><span class="c1">// Map of processes currently being processed.</span>
+<span class="w">    </span><span class="nx">Processes</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">InstanceState.Workers (an array of type ShowdownWorker)</span><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">ShowdownWorker</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">InstanceId</span><span class="w"> </span><span class="kt">uint</span>
+<span class="w">    </span><span class="nx">Address</span><span class="w">    </span><span class="kt">string</span>
+<span class="w">    </span><span class="nx">Status</span><span class="w">     </span><span class="nx">WorkerStatus</span>
+<span class="w">    </span><span class="c1">// Number of retries a worker has pending before a manager marks it as dropped.</span>
+<span class="w">    </span><span class="nx">Retries</span><span class="w">          </span><span class="kt">uint8</span>
+<span class="w">    </span><span class="nx">LastFetchedState</span><span class="w"> </span><span class="o">*</span><span class="nx">InstanceState</span>
+
+<span class="w">    </span><span class="nx">CreatedSince</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+<span class="w">    </span><span class="c1">// Time since a worker has stalled.</span>
+<span class="w">    </span><span class="nx">InactiveSince</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">Possible values of ShowdownWorker.Status</span><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">WorkerStatus</span><span class="w"> </span><span class="kt">int8</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="c1">// Worker is active, valid and open to requests.</span>
+<span class="w">    </span><span class="nx">SW_ACTIVE</span><span class="w"> </span><span class="nx">WorkerStatus</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="c1">// Worker was active but is no longer responding after multiple retries.</span>
+<span class="w">    </span><span class="c1">// Manager stops pinging such instances.</span>
+<span class="w">    </span><span class="nx">SW_DROPPED</span><span class="w"> </span><span class="nx">WorkerStatus</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="c1">// Worker was active but has stopped responding to unknown reasons.</span>
+<span class="w">    </span><span class="nx">SW_STALLED</span><span class="w"> </span><span class="nx">WorkerStatus</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<h5 id="status-401">Status 401</h5>
+<p>When the HTTP header <code>Access-Token</code> is not identified by the application.</p>
+<h3 id="post-judge"><strong>POST</strong> <code>/judge</code></h3>
+<p>Key endpoint to request Showdown for an execution of a process
+<div class="highlight"><span class="filename">curl (example Hello World with C++)</span><pre><span></span><code>curl<span class="w">  </span>http://localhost:8000/judge<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;Access-Token: abcdefghijklmnopqrstuvqxyz&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json; charset=utf-8&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--data-binary<span class="w"> </span>@-<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
+<span class="s">        {</span>
+<span class="s">            &quot;judge_params&quot;: {</span>
+<span class="s">                &quot;donotjudge&quot;: false,</span>
+<span class="s">                &quot;webhook&quot;: &quot;&quot;</span>
+<span class="s">            },</span>
+<span class="s">            &quot;exe&quot;: {</span>
+<span class="s">                &quot;language&quot;: &quot;cpp&quot;,</span>
+<span class="s">                &quot;code&quot;: &quot;#include &lt;iostream&gt;\n\nint main() {\n  std::cout &lt;&lt; \&quot;Hello, Wold!\&quot;;\n  return 0;\n}&quot;,</span>
+<span class="s">                &quot;input&quot;: &quot;10&quot;,</span>
+<span class="s">                &quot;output&quot;: &quot;1\n2\n3\n4\n5\n6\n7\n8\n\n9 \n 10\n \n &quot;</span>
+<span class="s">            }</span>
+<span class="s">        }</span>
+<span class="s">        EOF</span>
+</code></pre></div></p>
+<div class="highlight"><span class="filename">example response (standalone instance)</span><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;pid&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;d2aeaf2a-f2d1-4c17-998f-3a857b1810ee&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;webhook&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;judged&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;output&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hello, Wold!&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;time:0.001\ntime-wall:0.001\nmax-rss:3576\ncsw-voluntary:3\ncsw-forced:1\ncg-mem:35648\nexitcode:0\n&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;expected&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1\n2\n3\n4\n5\n6\n7\n8\n\n9 \n 10\n \n &quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;server_fault&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="understanding-requests-using-internal-types">Understanding requests using internal types</h4>
+<div class="highlight"><span class="filename">Top level schema</span><pre><span></span><code><span class="c1">// Struct to define http request to showdown</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">JudgeRequest</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">JudgeParams</span><span class="w"> </span><span class="nx">judge</span><span class="p">.</span><span class="nx">Params</span><span class="w">            </span><span class="s">`json:&quot;judge_params&quot;`</span>
+<span class="w">    </span><span class="nx">Exe</span><span class="w">         </span><span class="nx">engine</span><span class="p">.</span><span class="nx">ExecutionRequest</span><span class="w"> </span><span class="s">`json:&quot;exe&quot;`</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">JudgeRequest.JudgeParams</span><pre><span></span><code><span class="kd">type</span><span class="w"> </span><span class="nx">Params</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Set the webhook, and showdown will send the response to that webhook</span>
+<span class="w">    </span><span class="c1">// instead of an immediate response.</span>
+<span class="w">    </span><span class="nx">Webhook</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;webhook&quot;`</span>
+
+<span class="w">    </span><span class="c1">// Set this to true and Showdown will only execute the code, not judge.</span>
+<span class="w">    </span><span class="nx">DoNotJudge</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="s">`json:&quot;donotjudge&quot;`</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><span class="filename">JudgeRequest.Exe</span><pre><span></span><code><span class="c1">// Constructs of fields required for a execution request to be valid.</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">ExecutionRequest</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Code submitted by the user.</span>
+<span class="w">    </span><span class="nx">Code</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;code&quot;`</span>
+<span class="w">    </span><span class="c1">// Programming language of the code.</span>
+<span class="w">    </span><span class="nx">Language</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;language&quot;`</span>
+<span class="w">    </span><span class="c1">// What should be streamed into the program.</span>
+<span class="w">    </span><span class="nx">Input</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;input&quot;`</span>
+<span class="w">    </span><span class="c1">// What is the expected output for the program.</span>
+<span class="w">    </span><span class="nx">Output</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;output&quot;`</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="understanding-response-using-internal-types_1">Understanding response using internal types</h4>
+<h5 id="status-200_1">Status 200</h5>
+<div class="highlight"><span class="filename">Top level schema</span><pre><span></span><code><span class="c1">// Struct to define the end results the users will receive.</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">ExecutionResponse</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">PID</span><span class="w">         </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;pid&quot;`</span>
+<span class="w">    </span><span class="nx">Webhook</span><span class="w">     </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;webhook&quot;`</span>
+<span class="w">    </span><span class="nx">Success</span><span class="w">     </span><span class="kt">bool</span><span class="w">   </span><span class="s">`json:&quot;success&quot;`</span>
+<span class="w">    </span><span class="nx">Judged</span><span class="w">      </span><span class="kt">bool</span><span class="w">   </span><span class="s">`json:&quot;judged&quot;`</span>
+<span class="w">    </span><span class="nx">Error</span><span class="w">       </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;error&quot;`</span>
+<span class="w">    </span><span class="nx">Output</span><span class="w">      </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;output&quot;`</span>
+<span class="w">    </span><span class="nx">Meta</span><span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;meta&quot;`</span>
+<span class="w">    </span><span class="nx">Expected</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;expected&quot;`</span>
+<span class="w">    </span><span class="nx">ServerFault</span><span class="w"> </span><span class="kt">bool</span><span class="w">   </span><span class="s">`json:&quot;server_fault&quot;`</span>
+<span class="p">}</span>
+</code></pre></div>
+<h5 id="status-401_1">Status 401</h5>
+<p>When the HTTP header <code>Access-Token</code> is not identified by the application.</p>
+<h5 id="status-400">Status 400</h5>
+<p>Following are the possible self-explanatory error strings.</p>
+<ul>
+<li><code>Not allowed on worker instance</code></li>
+<li><code>max active processes limit reached</code></li>
+</ul>
+<h5 id="status-500">Status 500</h5>
+<p>When something is wrong with the application servers.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <a href='https://showdown.cambo.in'>Showdown is an open source remote code execution engine</a> built with &#10084; by <a href="https://cambo.in">Maninderpal Singh</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.tooltips"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+    
+  </body>
+</html>

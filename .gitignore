@@ -3,6 +3,5 @@ build/
 .config
 .env.creds
 .config
-docs/site
 curltest.sh
 env/standalone/log.log
